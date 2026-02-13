@@ -1,14 +1,233 @@
-.tools-page { max-width: 600px; margin: 0 auto; padding: 40px 20px; }
-.tools-back-link { display: inline-block; color: #a0a0b8; margin-bottom: 32px; text-decoration: none; font-size: 0.95rem; transition: color 0.2s; }
-.tools-back-link:hover { color: #e94560; }
-.tools-page h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; background: linear-gradient(135deg, #e94560, #533483); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-.tools-subtitle { color: #a0a0b8; margin-bottom: 40px; font-size: 1rem; }
-.tools-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
-.tools-card { display: flex; align-items: center; gap: 20px; padding: 24px; border-radius: 16px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); text-decoration: none; color: inherit; transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s; }
-.tools-card:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(233,69,96,0.12); border-color: rgba(233,69,96,0.25); }
-.tools-icon { font-size: 2.5rem; line-height: 1; flex-shrink: 0; }
-.tools-info { flex: 1; min-width: 0; }
-.tools-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 4px; }
-.tools-desc { font-size: 0.85rem; color: #a0a0b8; line-height: 1.4; }
-.tools-arrow { font-size: 1.4rem; color: #a0a0b8; transition: transform 0.2s, color 0.2s; flex-shrink: 0; }
-.tools-card:hover .tools-arrow { transform: translateX(4px); color: #e94560; }
+/* ---- TOOLS LISTING PAGE ---- */
+
+.tools-page {
+  position: relative;
+  z-index: 1;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 0 20px 80px;
+}
+
+/* ---- HERO ---- */
+.tools-hero {
+  text-align: center;
+  padding: 120px 0 60px;
+}
+
+.tools-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 18px;
+  border-radius: 20px;
+  background: rgba(233, 69, 96, 0.08);
+  border: 1px solid rgba(233, 69, 96, 0.2);
+  font-size: 0.8rem;
+  color: #e94560;
+  font-weight: 600;
+  margin-bottom: 24px;
+  opacity: 0;
+  animation: fadeUp 0.6s 0.2s forwards;
+}
+
+.tools-hero-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #e94560;
+  box-shadow: 0 0 8px rgba(233, 69, 96, 0.6);
+  animation: pulse 2s infinite;
+}
+
+.tools-hero-title {
+  font-size: clamp(3rem, 8vw, 4.5rem);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, #e94560 0%, #a478e8 40%, #00e5ff 70%, #e94560 100%);
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 4s ease-in-out infinite, fadeUp 0.6s 0.3s forwards;
+  opacity: 0;
+  margin-bottom: 12px;
+}
+
+.tools-hero-sub {
+  color: #a0a0b8;
+  font-size: 1.1rem;
+  opacity: 0;
+  animation: fadeUp 0.6s 0.45s forwards;
+}
+
+/* ---- GRID ---- */
+.tools-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+/* last card spans full width when odd count */
+.tools-grid > .tools-card:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+}
+
+/* ---- CARD ---- */
+.tools-card {
+  --card-accent: #e94560;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 28px 24px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  text-decoration: none;
+  color: inherit;
+  overflow: hidden;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s, border-color 0.35s;
+  opacity: 0;
+  animation: fadeUp 0.5s ease forwards;
+  backdrop-filter: blur(8px);
+}
+
+.tools-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow:
+    0 16px 48px rgba(0, 0, 0, 0.3),
+    0 0 40px color-mix(in srgb, var(--card-accent) 15%, transparent);
+  border-color: color-mix(in srgb, var(--card-accent) 40%, transparent);
+}
+
+/* glow orb behind card on hover */
+.tools-card-glow {
+  position: absolute;
+  top: -40%;
+  left: -20%;
+  width: 140%;
+  height: 140%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--card-accent) 8%, transparent) 0%,
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.4s;
+  pointer-events: none;
+}
+
+.tools-card:hover .tools-card-glow {
+  opacity: 1;
+}
+
+/* diagonal shine sweep on hover */
+.tools-card-shine {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.04) 50%,
+    transparent 60%
+  );
+  transition: left 0.6s ease;
+  pointer-events: none;
+}
+
+.tools-card:hover .tools-card-shine {
+  left: 140%;
+}
+
+.tools-card-inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+}
+
+.tools-icon {
+  font-size: 3rem;
+  line-height: 1;
+  filter: drop-shadow(0 4px 12px color-mix(in srgb, var(--card-accent) 30%, transparent));
+  transition: transform 0.3s;
+}
+
+.tools-card:hover .tools-icon {
+  transform: scale(1.15);
+}
+
+.tools-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.tools-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+  transition: color 0.3s;
+}
+
+.tools-card:hover .tools-title {
+  color: var(--card-accent);
+}
+
+.tools-desc {
+  font-size: 0.82rem;
+  color: #a0a0b8;
+  line-height: 1.5;
+}
+
+.tools-arrow {
+  font-size: 1.4rem;
+  color: #a0a0b8;
+  transition: transform 0.3s, color 0.3s;
+  align-self: flex-end;
+}
+
+.tools-card:hover .tools-arrow {
+  transform: translateX(6px);
+  color: var(--card-accent);
+}
+
+/* ---- RESPONSIVE ---- */
+
+/* Tablet */
+@media (max-width: 700px) {
+  .tools-hero {
+    padding: 100px 0 48px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 500px) {
+  .tools-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .tools-grid > .tools-card:last-child:nth-child(odd) {
+    grid-column: auto;
+  }
+
+  .tools-hero {
+    padding: 90px 0 36px;
+  }
+
+  .tools-hero-title {
+    font-size: 3rem;
+  }
+
+  .tools-card {
+    padding: 22px 18px;
+  }
+
+  .tools-icon {
+    font-size: 2.4rem;
+  }
+}
