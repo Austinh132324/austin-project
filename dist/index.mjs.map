@@ -1,1 +1,0 @@
-{"version":3,"sources":["../src/utils/hello.ts"],"sourcesContent":["/**\n * Returns a greeting string.\n */\nexport function hello(name: string): string {\n  return `Hello, ${name}!`;\n}\n"],"mappings":";AAGO,SAAS,MAAM,MAAsB;AAC1C,SAAO,UAAU,IAAI;AACvB;","names":[]}
