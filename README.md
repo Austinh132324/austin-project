@@ -1,26 +1,37 @@
-# Howell-Tech-Platform
+# Austin's Tech Platform
 
-Shared library platform for Howell Technologies. Published as `@howell-tech/platform` to JFrog Artifactory for use in client applications.
+Personal tech platform with games, tools, and portfolio — built with React and deployed to [austinshowell.dev](https://austinshowell.dev) via GitHub Pages.
 
-## Installation
+## What's Inside
 
-Install from your Artifactory npm registry:
+**Portfolio**
+- Home page with AI chatbot
+- About Me
+- Projects showcase
 
-```bash
-npm install @howell-tech/platform
-```
+**Games**
+- Checkers
+- Snake
+- Tetris
+- Tic-Tac-Toe
+- Ethan Farm
 
-> Your `.npmrc` must be configured to resolve the `@howell-tech` scope from Artifactory. See the [Publishing](#publishing) section for details.
+**Tools**
+- Pomodoro Timer
+- Markdown Previewer
+- Color Palette Generator
+- Music Visualizer
+- Terminal Emulator
 
-## Usage
+## Tech Stack
 
-```ts
-import { hello } from "@howell-tech/platform";
+- **Framework:** React 18 + TypeScript
+- **Routing:** React Router v6 (HashRouter)
+- **Build:** Vite
+- **Testing:** Vitest + React Testing Library
+- **Deployment:** GitHub Pages via GitHub Actions
 
-console.log(hello("World")); // "Hello, World!"
-```
-
-## Development
+## Getting Started
 
 ### Prerequisites
 
@@ -30,33 +41,23 @@ console.log(hello("World")); // "Hello, World!"
 ### Setup
 
 ```bash
-git clone https://github.com/Austinh132324/Howell-Tech-Platform.git
-cd Howell-Tech-Platform
+git clone https://github.com/Austinh132324/austin-project.git
+cd austin-project
 npm install
 ```
 
 ### Scripts
 
-| Command          | Description                                  |
-| ---------------- | -------------------------------------------- |
-| `npm run build`  | Bundle with tsup (CJS + ESM + declarations)  |
-| `npm test`       | Run tests with vitest                        |
-| `npm run lint`   | Lint with ESLint                             |
-| `npm run clean`  | Remove the `dist/` directory                 |
+| Command            | Description                  |
+| ------------------ | ---------------------------- |
+| `npm run dev`      | Start local dev server       |
+| `npm run build`    | Production build to `dist/`  |
+| `npm run preview`  | Preview production build     |
+| `npm test`         | Run tests with Vitest        |
+| `npm run lint`     | Lint with ESLint             |
 
-## Publishing
+## Deployment
 
-Releases are published to JFrog Artifactory via GitHub Actions when a version tag is pushed:
+Pushes to `main` automatically build and deploy to GitHub Pages via the workflow in `.github/workflows/deploy-dev.yml`.
 
-```bash
-# 1. Bump version
-npm version patch   # or minor / major
-
-# 2. Push the tag
-git push origin --tags
-```
-
-The workflow requires two GitHub Actions secrets:
-
-- `ARTIFACTORY_REGISTRY_URL` — your JFrog npm registry URL (e.g., `your-instance.jfrog.io/artifactory/api/npm/npm-local/`)
-- `ARTIFACTORY_AUTH_TOKEN` — an Artifactory API token with publish permissions
+**Live site:** [austinshowell.dev](https://austinshowell.dev)
