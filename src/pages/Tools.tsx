@@ -6,6 +6,7 @@ const tools = [
   { to: '/tools/markdown', icon: '\u270E', title: 'Markdown Preview', desc: 'Live markdown editor and previewer' },
   { to: '/tools/colors', icon: '\uD83C\uDFA8', title: 'Color Palette', desc: 'Generate harmonious color palettes' },
   { to: '/tools/visualizer', icon: '\uD83C\uDFB5', title: 'Music Visualizer', desc: 'Visualize audio with canvas animations' },
+  { to: '/tools/nba', icon: '\uD83C\uDFC0', title: 'NBA Command Center', desc: 'Live scores, player tracking, and group stats' },
 ]
 
 export default function Tools() {

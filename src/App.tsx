@@ -14,6 +14,7 @@ import Pomodoro from './pages/Pomodoro'
 import MarkdownPreview from './pages/MarkdownPreview'
 import ColorPalette from './pages/ColorPalette'
 import MusicVisualizer from './pages/MusicVisualizer'
+import NBACommandCenter from './pages/NBACommandCenter'
 import Terminal from './pages/Terminal'
 import EthanFarm from './pages/EthanFarm'
 import Analytics, { trackPageView } from './pages/Analytics'
@@ -45,6 +46,7 @@ export default function App() {
         <Route path="/tools/markdown" element={<MarkdownPreview />} />
         <Route path="/tools/colors" element={<ColorPalette />} />
         <Route path="/tools/visualizer" element={<MusicVisualizer />} />
+        <Route path="/tools/nba" element={<NBACommandCenter />} />
         <Route path="/terminal" element={<Terminal />} />
         <Route path="/ethan-farm" element={<EthanFarm />} />
         <Route path="/analytics" element={<Analytics />} />
