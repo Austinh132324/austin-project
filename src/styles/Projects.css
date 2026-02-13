@@ -1,0 +1,324 @@
+/* ---- PROJECTS HERO ---- */
+.projects-hero {
+  position: relative;
+  z-index: 1;
+  padding: 120px 20px 60px;
+  text-align: center;
+}
+
+.projects-title {
+  font-size: clamp(2.2rem, 6vw, 3.6rem);
+  font-weight: 800;
+  background: linear-gradient(135deg, #e94560, #a478e8, #e94560, #a478e8);
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 6s ease-in-out infinite, fadeUp 0.8s ease both;
+}
+
+.projects-subtitle {
+  color: #a0a0b8;
+  font-size: 1.1rem;
+  margin-top: 12px;
+  animation: fadeUp 0.8s ease 0.15s both;
+}
+
+/* ---- HUD STATS BAR ---- */
+.hud-bar {
+  position: relative;
+  z-index: 1;
+  max-width: 1100px;
+  margin: 0 auto 32px;
+  padding: 0 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+  animation: fadeUp 0.8s ease 0.25s both;
+}
+
+.hud-stat {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 0.8rem;
+  color: #a0a0b8;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.hud-stat .num {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #e94560;
+  font-variant-numeric: tabular-nums;
+}
+
+.hud-pulse {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #00e676;
+  display: inline-block;
+  animation: pulse 1.6s ease-in-out infinite;
+}
+
+/* ---- FILTER BAR ---- */
+.filter-bar {
+  position: relative;
+  z-index: 1;
+  max-width: 1100px;
+  margin: 0 auto 40px;
+  padding: 0 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  animation: fadeUp 0.8s ease 0.35s both;
+}
+
+.filter-btn {
+  padding: 8px 20px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+  color: #a0a0b8;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  font-family: inherit;
+}
+
+.filter-btn:hover {
+  border-color: rgba(233, 69, 96, 0.4);
+  color: #e0e0e0;
+  background: rgba(233, 69, 96, 0.08);
+}
+
+.filter-btn.active {
+  border-color: #e94560;
+  color: #fff;
+  background: rgba(233, 69, 96, 0.18);
+  box-shadow: 0 0 12px rgba(233, 69, 96, 0.15);
+}
+
+/* ---- PROJECTS GRID ---- */
+.projects-grid {
+  position: relative;
+  z-index: 1;
+  max-width: 1100px;
+  margin: 0 auto 80px;
+  padding: 0 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+/* ---- PROJECT CARD ---- */
+.project-card {
+  position: relative;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  padding: 28px 24px;
+  transition: transform 0.2s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeUp 0.6s ease both;
+  will-change: transform;
+  overflow: hidden;
+}
+
+.project-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.project-card:hover {
+  border-color: rgba(233, 69, 96, 0.35);
+  box-shadow: 0 8px 40px rgba(233, 69, 96, 0.08), 0 0 0 1px rgba(233, 69, 96, 0.1);
+}
+
+/* ---- CARD GLOW ---- */
+.card-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 20px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+/* ---- CARD HEADER ---- */
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.card-icon {
+  font-size: 1.4rem;
+}
+
+.card-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #e0e0e8;
+  flex: 1;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.status-dot.active {
+  background: #00e676;
+  box-shadow: 0 0 6px rgba(0, 230, 118, 0.5);
+  animation: pulse 1.6s ease-in-out infinite;
+}
+
+.status-dot.shipped {
+  background: #448aff;
+  box-shadow: 0 0 6px rgba(68, 138, 255, 0.4);
+}
+
+.status-dot.concept {
+  background: #ffca28;
+  box-shadow: 0 0 6px rgba(255, 202, 40, 0.4);
+}
+
+.status-label {
+  font-size: 0.7rem;
+  color: #a0a0b8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ---- CARD BODY ---- */
+.card-desc {
+  color: #8a8aa0;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.card-tag {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  background: rgba(233, 69, 96, 0.12);
+  color: #e94560;
+  border: 1px solid rgba(233, 69, 96, 0.18);
+}
+
+.card-tag.purple {
+  background: rgba(164, 120, 232, 0.12);
+  color: #a478e8;
+  border-color: rgba(164, 120, 232, 0.18);
+}
+
+.card-tag.blue {
+  background: rgba(68, 138, 255, 0.12);
+  color: #448aff;
+  border-color: rgba(68, 138, 255, 0.18);
+}
+
+/* ---- CARD HIGHLIGHTS ---- */
+.card-highlights {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.card-highlights li {
+  position: relative;
+  padding-left: 16px;
+  font-size: 0.82rem;
+  color: #8a8aa0;
+  line-height: 1.8;
+}
+
+.card-highlights li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #a478e8;
+}
+
+/* ---- RESPONSIVE ---- */
+@media (max-width: 500px) {
+  .projects-hero {
+    padding: 100px 16px 40px;
+  }
+
+  .hud-bar {
+    gap: 12px;
+  }
+
+  .hud-stat {
+    padding: 6px 12px;
+    font-size: 0.72rem;
+  }
+
+  .hud-stat .num {
+    font-size: 0.95rem;
+  }
+
+  .filter-bar {
+    gap: 6px;
+  }
+
+  .filter-btn {
+    padding: 6px 14px;
+    font-size: 0.78rem;
+  }
+
+  .projects-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 0 16px;
+    margin-bottom: 60px;
+  }
+
+  .project-card {
+    padding: 22px 18px;
+    border-radius: 16px;
+  }
+
+  .card-title {
+    font-size: 1rem;
+  }
+
+  .card-desc {
+    font-size: 0.85rem;
+  }
+}

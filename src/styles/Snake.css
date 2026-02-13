@@ -1,0 +1,20 @@
+.snake-page { display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 12px; position: relative; }
+.snake-top-bar { display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 420px; margin-bottom: 12px; }
+.snake-back-link { color: #e94560; text-decoration: none; font-size: 0.95rem; }
+.snake-back-link::before { content: '\2190\00a0'; }
+.snake-page h1 { font-size: 1.6rem; font-weight: 800; background: linear-gradient(135deg, #e94560, #533483); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.snake-score { font-size: 1.2rem; font-weight: 700; color: #e94560; margin-bottom: 8px; }
+.snake-board-container { width: min(90vw, 400px); height: min(90vw, 400px); position: relative; }
+.snake-board-container canvas { width: 100%; height: 100%; border-radius: 8px; box-shadow: 0 4px 24px rgba(0,0,0,0.5); display: block; }
+.snake-overlay { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.85); padding: 24px 40px; border-radius: 16px; text-align: center; font-size: 1.5rem; font-weight: 700; color: #e94560; z-index: 10; }
+.snake-final-score { font-size: 1rem; color: #a0a0b8; margin-top: 8px; }
+.snake-controls { display: flex; gap: 12px; margin-top: 16px; }
+.snake-btn { padding: 10px 24px; border: none; border-radius: 8px; background: linear-gradient(135deg, #e94560, #533483); color: #fff; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: opacity 0.2s; }
+.snake-btn:hover { opacity: 0.9; }
+.snake-btn.secondary { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); }
+.snake-dpad { display: flex; flex-direction: column; align-items: center; gap: 4px; margin-top: 16px; }
+.dpad-row { display: flex; gap: 4px; }
+.dpad-btn { width: 48px; height: 48px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.04); color: #a0a0b8; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+.dpad-btn:active { background: rgba(233,69,96,0.2); color: #e94560; }
+.snake-footer { margin-top: auto; padding-top: 24px; font-size: 0.8rem; color: #a0a0b8; text-align: center; }
+@media (min-width: 600px) { .snake-dpad { display: none; } }

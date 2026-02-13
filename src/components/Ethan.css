@@ -1,0 +1,582 @@
+/* ═══════════════════════════════════════
+   ETHAN — Pixel Art Sidekick
+   ═══════════════════════════════════════ */
+
+/* ── Container ── */
+.ethan-container {
+  position: absolute;
+  z-index: 9999;
+  pointer-events: none;
+  transform: translate(-24px, -64px);
+  transition: none;
+}
+
+.ethan-container > * {
+  pointer-events: auto;
+}
+
+/* ── Facing ── */
+.ethan-facing-right .ethan-body {
+  transform: scaleX(-1);
+}
+
+/* ── Pixel unit system ── */
+.ep {
+  position: absolute;
+  image-rendering: pixelated;
+}
+
+/* ── The sprite (clickable) ── */
+.ethan-sprite {
+  cursor: pointer;
+  position: relative;
+  width: 48px;
+  height: 64px;
+}
+
+.ethan-body {
+  position: relative;
+  width: 48px;
+  height: 64px;
+  transform-origin: center bottom;
+}
+
+/* ── PIXEL ART PIECES ── */
+/* Using 4px grid units for chunky pixel look */
+
+/* Hat top */
+.ep-hat-1 {
+  width: 24px; height: 8px;
+  background: #e94560;
+  top: 0; left: 12px;
+  border-radius: 2px 2px 0 0;
+}
+.ep-hat-2 {
+  width: 20px; height: 4px;
+  background: #c73750;
+  top: 4px; left: 14px;
+}
+/* Hat brim */
+.ep-hat-brim {
+  width: 32px; height: 4px;
+  background: #e94560;
+  top: 8px; left: 8px;
+}
+
+/* Head */
+.ep-head {
+  width: 28px; height: 16px;
+  background: #ffd5a0;
+  top: 12px; left: 10px;
+  border-radius: 4px;
+}
+
+/* Eyes */
+.ep-eye-l {
+  width: 6px; height: 6px;
+  background: #1a1a2e;
+  top: 16px; left: 16px;
+  border-radius: 1px;
+  animation: ethan-blink 4s infinite;
+}
+.ep-eye-r {
+  width: 6px; height: 6px;
+  background: #1a1a2e;
+  top: 16px; left: 28px;
+  border-radius: 1px;
+  animation: ethan-blink 4s infinite 0.1s;
+}
+
+/* Mouth - sassy smirk */
+.ep-mouth {
+  width: 10px; height: 3px;
+  background: #c0785a;
+  top: 24px; left: 21px;
+  border-radius: 0 0 4px 2px;
+}
+
+/* Torso */
+.ep-torso {
+  width: 24px; height: 16px;
+  background: #4ade80;
+  top: 30px; left: 12px;
+  border-radius: 2px;
+}
+
+/* Arms */
+.ep-arm-l {
+  width: 6px; height: 14px;
+  background: #4ade80;
+  top: 30px; left: 6px;
+  border-radius: 2px;
+  transform-origin: top center;
+  animation: ethan-arm-swing-l 1.2s ease-in-out infinite;
+}
+.ep-arm-r {
+  width: 6px; height: 14px;
+  background: #4ade80;
+  top: 30px; left: 36px;
+  border-radius: 2px;
+  transform-origin: top center;
+  animation: ethan-arm-swing-r 1.2s ease-in-out infinite;
+}
+
+/* Legs */
+.ep-leg-l {
+  width: 8px; height: 14px;
+  background: #3b82f6;
+  top: 46px; left: 14px;
+  border-radius: 0 0 2px 2px;
+  transform-origin: top center;
+}
+.ep-leg-r {
+  width: 8px; height: 14px;
+  background: #3b82f6;
+  top: 46px; left: 26px;
+  border-radius: 0 0 2px 2px;
+  transform-origin: top center;
+}
+
+/* Shadow */
+.ethan-shadow {
+  width: 32px;
+  height: 6px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 50%;
+  margin: 2px auto 0;
+  transition: transform 0.3s, opacity 0.3s;
+}
+
+/* ── ANIMATIONS ── */
+
+/* Blink */
+@keyframes ethan-blink {
+  0%, 92%, 100% { height: 6px; }
+  95% { height: 1px; }
+}
+
+/* Idle bob */
+.ethan-idle .ethan-body {
+  animation: ethan-bob 2s ease-in-out infinite;
+}
+@keyframes ethan-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+/* Idle arm swing */
+@keyframes ethan-arm-swing-l {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(5deg); }
+}
+@keyframes ethan-arm-swing-r {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(-5deg); }
+}
+
+/* Walk */
+.ethan-walk .ethan-body {
+  animation: ethan-walk-bob 0.4s ease-in-out infinite;
+}
+.ethan-walk .ep-leg-l {
+  animation: ethan-walk-leg-l 0.4s ease-in-out infinite;
+}
+.ethan-walk .ep-leg-r {
+  animation: ethan-walk-leg-r 0.4s ease-in-out infinite;
+}
+.ethan-walk .ep-arm-l {
+  animation: ethan-walk-arm-l 0.4s ease-in-out infinite;
+}
+.ethan-walk .ep-arm-r {
+  animation: ethan-walk-arm-r 0.4s ease-in-out infinite;
+}
+
+@keyframes ethan-walk-bob {
+  0%, 100% { transform: translateY(0); }
+  25% { transform: translateY(-2px); }
+  75% { transform: translateY(-2px); }
+}
+@keyframes ethan-walk-leg-l {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-20deg); }
+  75% { transform: rotate(20deg); }
+}
+@keyframes ethan-walk-leg-r {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(20deg); }
+  75% { transform: rotate(-20deg); }
+}
+@keyframes ethan-walk-arm-l {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(15deg); }
+  75% { transform: rotate(-15deg); }
+}
+@keyframes ethan-walk-arm-r {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-15deg); }
+  75% { transform: rotate(15deg); }
+}
+
+/* Jump */
+.ethan-jump .ethan-body {
+  animation: ethan-jump-body 0.6s ease-in-out infinite;
+}
+.ethan-jump .ethan-shadow {
+  animation: ethan-jump-shadow 0.6s ease-in-out infinite;
+}
+.ethan-jump .ep-arm-l,
+.ethan-jump .ep-arm-r {
+  animation: ethan-jump-arms 0.6s ease-in-out infinite;
+}
+.ethan-jump .ep-leg-l {
+  animation: ethan-jump-leg-l 0.6s ease-in-out infinite;
+}
+.ethan-jump .ep-leg-r {
+  animation: ethan-jump-leg-r 0.6s ease-in-out infinite;
+}
+
+@keyframes ethan-jump-body {
+  0%, 100% { transform: translateY(0); }
+  40%, 60% { transform: translateY(-20px); }
+}
+@keyframes ethan-jump-shadow {
+  0%, 100% { transform: scale(1); opacity: 0.2; }
+  40%, 60% { transform: scale(0.5); opacity: 0.1; }
+}
+@keyframes ethan-jump-arms {
+  0%, 100% { transform: rotate(0deg); }
+  30%, 70% { transform: rotate(-45deg); }
+}
+@keyframes ethan-jump-leg-l {
+  0%, 100% { transform: rotate(0deg); }
+  30%, 70% { transform: rotate(15deg); }
+}
+@keyframes ethan-jump-leg-r {
+  0%, 100% { transform: rotate(0deg); }
+  30%, 70% { transform: rotate(-15deg); }
+}
+
+/* Wave (on hover) */
+.ethan-sprite:hover .ep-arm-r {
+  animation: ethan-wave 0.5s ease-in-out infinite !important;
+}
+@keyframes ethan-wave {
+  0%, 100% { transform: rotate(-30deg); }
+  50% { transform: rotate(-70deg); }
+}
+
+/* ── SPEECH BUBBLE ── */
+.ethan-bubble {
+  position: absolute;
+  bottom: 72px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1a1a2e;
+  color: #e0e0e0;
+  border: 2px solid #e94560;
+  border-radius: 12px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-family: 'Courier New', monospace;
+  white-space: nowrap;
+  max-width: 260px;
+  white-space: normal;
+  word-wrap: break-word;
+  animation: ethan-bubble-in 0.3s ease-out;
+  box-shadow: 0 0 12px rgba(233, 69, 96, 0.3);
+  pointer-events: none;
+}
+
+.ethan-bubble-tail {
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 8px solid #e94560;
+}
+
+@keyframes ethan-bubble-in {
+  from { opacity: 0; transform: translateX(-50%) translateY(5px) scale(0.8); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+}
+
+/* ── CHAT WINDOW ── */
+.ethan-chat {
+  position: absolute;
+  bottom: 72px;
+  right: -60px;
+  width: 280px;
+  height: 350px;
+  background: #12121a;
+  border: 2px solid #e94560;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(233, 69, 96, 0.3), 0 8px 32px rgba(0, 0, 0, 0.5);
+  animation: ethan-chat-in 0.3s ease-out;
+  font-family: 'Courier New', monospace;
+}
+
+@keyframes ethan-chat-in {
+  from { opacity: 0; transform: translateY(10px) scale(0.9); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.ethan-chat-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: #1a1a2e;
+  border-bottom: 1px solid #e94560;
+  color: #e94560;
+  font-size: 13px;
+  font-weight: bold;
+}
+.ethan-chat-header span {
+  flex: 1;
+}
+
+.ethan-chat-minimize,
+.ethan-chat-close {
+  background: none;
+  border: 1px solid rgba(233, 69, 96, 0.3);
+  color: #e94560;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+.ethan-chat-minimize:hover,
+.ethan-chat-close:hover {
+  background: rgba(233, 69, 96, 0.2);
+}
+
+.ethan-chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.ethan-chat-messages::-webkit-scrollbar {
+  width: 4px;
+}
+.ethan-chat-messages::-webkit-scrollbar-thumb {
+  background: #e94560;
+  border-radius: 2px;
+}
+
+.ethan-chat-msg {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  animation: ethan-msg-in 0.3s ease-out;
+}
+@keyframes ethan-msg-in {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.ethan-chat-ethan {
+  align-self: flex-start;
+}
+.ethan-chat-user {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+
+.ethan-chat-avatar {
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.ethan-chat-text {
+  background: #1a1a2e;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  color: #e0e0e0;
+  max-width: 200px;
+  word-wrap: break-word;
+  line-height: 1.4;
+}
+.ethan-chat-user .ethan-chat-text {
+  background: #2a1a3e;
+  color: #c8b0e8;
+}
+
+.ethan-chat-input-row {
+  display: flex;
+  gap: 0;
+  border-top: 1px solid #e94560;
+}
+
+.ethan-chat-input {
+  flex: 1;
+  padding: 10px 12px;
+  background: #0a0a12;
+  border: none;
+  color: #e0e0e0;
+  font-size: 13px;
+  font-family: 'Courier New', monospace;
+  outline: none;
+}
+.ethan-chat-input::placeholder {
+  color: #555;
+}
+
+.ethan-chat-send {
+  padding: 10px 14px;
+  background: #e94560;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: bold;
+  font-family: 'Courier New', monospace;
+  transition: background 0.2s;
+}
+.ethan-chat-send:hover {
+  background: #ff6b81;
+}
+
+/* ── MINIMIZED BUTTON ── */
+.ethan-minimized {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 9999;
+  background: #1a1a2e;
+  border: 2px solid #e94560;
+  border-radius: 50px;
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  color: #e0e0e0;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  box-shadow: 0 0 12px rgba(233, 69, 96, 0.3);
+  transition: transform 0.2s, box-shadow 0.2s;
+  animation: ethan-minimized-pulse 2s ease-in-out infinite;
+}
+.ethan-minimized:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(233, 69, 96, 0.5);
+}
+
+.ethan-minimized-icon {
+  font-size: 18px;
+}
+
+@keyframes ethan-minimized-pulse {
+  0%, 100% { box-shadow: 0 0 12px rgba(233, 69, 96, 0.3); }
+  50% { box-shadow: 0 0 20px rgba(233, 69, 96, 0.5); }
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 600px) {
+  .ethan-chat {
+    width: 250px;
+    height: 300px;
+    right: -40px;
+  }
+  .ethan-bubble {
+    max-width: 200px;
+    font-size: 12px;
+  }
+}
+
+/* ── Light theme adjustments ── */
+[data-theme="light"] .ethan-bubble {
+  background: #ffffff;
+  color: #1a1a2e;
+  border-color: #e94560;
+}
+[data-theme="light"] .ethan-chat {
+  background: #f5f5f5;
+}
+[data-theme="light"] .ethan-chat-header {
+  background: #e8e8e8;
+}
+[data-theme="light"] .ethan-chat-text {
+  background: #e0e0e0;
+  color: #1a1a2e;
+}
+[data-theme="light"] .ethan-chat-user .ethan-chat-text {
+  background: #d8c8f0;
+  color: #2a1a3e;
+}
+[data-theme="light"] .ethan-chat-input {
+  background: #ffffff;
+  color: #1a1a2e;
+}
+[data-theme="light"] .ethan-minimized {
+  background: #ffffff;
+  color: #1a1a2e;
+}
+
+/* ═══════════════════════════════════════
+   MESSING EFFECTS — applied to page elements
+   ═══════════════════════════════════════ */
+
+.ethan-messing-tilt {
+  transform: rotate(-8deg) !important;
+  display: inline-block;
+}
+
+.ethan-messing-shake {
+  animation: ethan-effect-shake 0.4s ease-in-out infinite !important;
+  display: inline-block;
+}
+@keyframes ethan-effect-shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px) rotate(-2deg); }
+  75% { transform: translateX(5px) rotate(2deg); }
+}
+
+.ethan-messing-bounce {
+  animation: ethan-effect-bounce 0.5s ease-in-out infinite !important;
+  display: inline-block;
+}
+@keyframes ethan-effect-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.ethan-messing-flip {
+  transform: scaleX(-1) !important;
+  display: inline-block;
+}
+
+.ethan-messing-grow {
+  transform: scale(1.3) !important;
+  display: inline-block;
+}
+
+.ethan-messing-color {
+  color: #e94560 !important;
+  filter: hue-rotate(90deg) !important;
+}
+
+.ethan-messing-spin {
+  animation: ethan-effect-spin 1s ease-in-out 1 !important;
+  display: inline-block;
+}
+@keyframes ethan-effect-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

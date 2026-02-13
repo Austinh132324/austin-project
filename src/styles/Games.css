@@ -1,0 +1,207 @@
+/* ---- GAMES LISTING PAGE ---- */
+
+.games-page {
+  position: relative;
+  z-index: 1;
+  max-width: 650px;
+  margin: 0 auto;
+  padding: 0 20px 80px;
+}
+
+/* ---- HERO ---- */
+.games-hero {
+  text-align: center;
+  padding: 120px 0 60px;
+}
+
+.games-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 18px;
+  border-radius: 20px;
+  background: rgba(233, 69, 96, 0.08);
+  border: 1px solid rgba(233, 69, 96, 0.2);
+  font-size: 0.8rem;
+  color: #e94560;
+  font-weight: 600;
+  margin-bottom: 24px;
+  opacity: 0;
+  animation: fadeUp 0.6s 0.2s forwards;
+}
+
+.games-hero-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #e94560;
+  box-shadow: 0 0 8px rgba(233, 69, 96, 0.6);
+  animation: pulse 2s infinite;
+}
+
+.games-hero-title {
+  font-size: clamp(3rem, 8vw, 4.5rem);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, #e94560 0%, #a478e8 40%, #00e5ff 70%, #e94560 100%);
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 4s ease-in-out infinite, fadeUp 0.6s 0.3s forwards;
+  opacity: 0;
+  margin-bottom: 12px;
+}
+
+.games-hero-sub {
+  color: #a0a0b8;
+  font-size: 1.1rem;
+  opacity: 0;
+  animation: fadeUp 0.6s 0.45s forwards;
+}
+
+/* ---- GRID ---- */
+.games-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+/* ---- CARD ---- */
+.games-card {
+  --card-accent: #e94560;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 28px 24px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  text-decoration: none;
+  color: inherit;
+  overflow: hidden;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s, border-color 0.35s;
+  opacity: 0;
+  animation: fadeUp 0.5s ease forwards;
+  backdrop-filter: blur(8px);
+}
+
+.games-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow:
+    0 16px 48px rgba(0, 0, 0, 0.3),
+    0 0 40px color-mix(in srgb, var(--card-accent) 15%, transparent);
+  border-color: color-mix(in srgb, var(--card-accent) 40%, transparent);
+}
+
+/* glow orb behind card on hover */
+.games-card-glow {
+  position: absolute;
+  top: -40%;
+  left: -20%;
+  width: 140%;
+  height: 140%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--card-accent) 8%, transparent) 0%,
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.4s;
+  pointer-events: none;
+}
+
+.games-card:hover .games-card-glow {
+  opacity: 1;
+}
+
+/* diagonal shine sweep on hover */
+.games-card-shine {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.04) 50%,
+    transparent 60%
+  );
+  transition: left 0.6s ease;
+  pointer-events: none;
+}
+
+.games-card:hover .games-card-shine {
+  left: 140%;
+}
+
+.games-card-inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+}
+
+.games-icon {
+  font-size: 3rem;
+  line-height: 1;
+  filter: drop-shadow(0 4px 12px color-mix(in srgb, var(--card-accent) 30%, transparent));
+  transition: transform 0.3s;
+}
+
+.games-card:hover .games-icon {
+  transform: scale(1.15);
+}
+
+.games-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.games-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+  transition: color 0.3s;
+}
+
+.games-card:hover .games-title {
+  color: var(--card-accent);
+}
+
+.games-desc {
+  font-size: 0.82rem;
+  color: #a0a0b8;
+  line-height: 1.5;
+}
+
+.games-arrow {
+  font-size: 1.4rem;
+  color: #a0a0b8;
+  transition: transform 0.3s, color 0.3s;
+  align-self: flex-end;
+}
+
+.games-card:hover .games-arrow {
+  transform: translateX(6px);
+  color: var(--card-accent);
+}
+
+/* ---- RESPONSIVE ---- */
+@media (max-width: 500px) {
+  .games-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .games-hero {
+    padding: 100px 0 40px;
+  }
+
+  .games-hero-title {
+    font-size: 3rem;
+  }
+}

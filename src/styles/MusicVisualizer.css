@@ -1,0 +1,16 @@
+.viz-page { display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 12px; }
+.viz-top-bar { display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 700px; margin-bottom: 16px; }
+.viz-back-link { color: #e94560; text-decoration: none; font-size: 0.95rem; }
+.viz-back-link::before { content: '\2190\00a0'; }
+.viz-page h1 { font-size: 1.6rem; font-weight: 800; background: linear-gradient(135deg, #e94560, #533483); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.viz-controls { display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; justify-content: center; align-items: center; }
+.viz-file-label { padding: 8px 16px; border-radius: 8px; background: linear-gradient(135deg, #e94560, #533483); color: #fff; font-size: 0.85rem; font-weight: 600; cursor: pointer; }
+.viz-btn { padding: 8px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.04); color: #a0a0b8; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; font-family: inherit; }
+.viz-btn:hover { border-color: #e94560; color: #e94560; }
+.viz-modes { display: flex; gap: 6px; }
+.viz-mode-btn { padding: 6px 12px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.04); color: #a0a0b8; cursor: pointer; font-size: 0.8rem; transition: all 0.2s; font-family: inherit; }
+.viz-mode-btn.active { border-color: #e94560; color: #fff; background: rgba(233,69,96,0.18); }
+.viz-canvas-wrap { width: 100%; max-width: 700px; height: 400px; position: relative; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 32px rgba(0,0,0,0.3); background: #0a0a1f; }
+.viz-canvas-wrap canvas { width: 100%; height: 100%; display: block; }
+.viz-placeholder { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: #606080; font-size: 1rem; }
+.viz-footer { margin-top: 16px; font-size: 0.8rem; color: #a0a0b8; }
