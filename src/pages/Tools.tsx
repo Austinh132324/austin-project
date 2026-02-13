@@ -8,7 +8,8 @@ const tools = [
   { to: '/tools/markdown', icon: '\u270E', title: 'Markdown Preview', desc: 'Live markdown editor and previewer', color: '#a478e8' },
   { to: '/tools/colors', icon: '\uD83C\uDFA8', title: 'Color Palette', desc: 'Generate harmonious color palettes', color: '#00e5ff' },
   { to: '/tools/visualizer', icon: '\uD83C\uDFB5', title: 'Music Visualizer', desc: 'Visualize audio with canvas animations', color: '#4ade80' },
-  { to: '/tools/nba', icon: '\uD83C\uDFC0', title: 'NBA Command Center', desc: 'Live scores, player tracking, and group stats', color: '#f59e0b' },
+  { to: '/tools/nba', icon: '\uD83C\uDFC0', title: 'NBA Command Center', desc: 'Live scores, odds, player props, and group stats', color: '#f59e0b' },
+  { to: '/tools/mlb', icon: '\u26BE', title: 'MLB Command Center', desc: 'Live scores, odds, player props, and group stats', color: '#2563eb' },
 ]
 
 export default function Tools() {
