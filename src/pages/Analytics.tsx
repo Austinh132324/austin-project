@@ -335,6 +335,10 @@ export default function Analytics() {
   const [lastRefresh, setLastRefresh] = useState(Date.now())
   const [refreshing, setRefreshing] = useState(false)
   const [historyPeriod, setHistoryPeriod] = useState<'daily' | 'weekly' | 'monthly'>('daily')
+  const [eventFilterType, setEventFilterType] = useState<string>('all')
+  const [eventFilterPage, setEventFilterPage] = useState<string>('all')
+  const [eventFilterDevice, setEventFilterDevice] = useState<string>('all')
+  const [eventFilterBrowser, setEventFilterBrowser] = useState<string>('all')
   const [dataSource, setDataSource] = useState<'local' | 'supabase'>('local')
   const [sbStatus, setSbStatus] = useState<'checking' | 'connected' | 'disconnected'>('checking')
   const [reconnecting, setReconnecting] = useState(false)
@@ -624,7 +628,18 @@ export default function Analytics() {
     setLastRefresh(Date.now())
   }
 
-  const recentEvents = [...events].reverse().slice(0, 50)
+  const filteredEvents = events.filter(ev => {
+    if (eventFilterType !== 'all' && ev.type !== eventFilterType) return false
+    if (eventFilterPage !== 'all' && ev.page !== eventFilterPage) return false
+    if (eventFilterDevice !== 'all' && (ev.device || '-') !== eventFilterDevice) return false
+    if (eventFilterBrowser !== 'all' && (ev.browser || '-') !== eventFilterBrowser) return false
+    return true
+  })
+  const recentEvents = [...filteredEvents].reverse().slice(0, 100)
+  const eventTypes = [...new Set(events.map(e => e.type))].sort()
+  const eventPages = [...new Set(events.map(e => e.page))].sort()
+  const eventDevices = [...new Set(events.map(e => e.device || '-'))].sort()
+  const eventBrowsers = [...new Set(events.map(e => e.browser || '-'))].sort()
 
   return (
     <>
@@ -1076,16 +1091,53 @@ export default function Analytics() {
                   <div className="pbi-kpi-label">Total Events</div>
                 </div>
                 <div className="pbi-kpi" style={{ '--kpi-accent': PBI.purple } as React.CSSProperties}>
-                  <div className="pbi-kpi-value">{totalGames}</div>
-                  <div className="pbi-kpi-label">Games Played</div>
+                  <div className="pbi-kpi-value">{filteredEvents.length.toLocaleString()}</div>
+                  <div className="pbi-kpi-label">Filtered Events</div>
                 </div>
                 <div className="pbi-kpi" style={{ '--kpi-accent': PBI.green } as React.CSSProperties}>
                   <div className="pbi-kpi-value">{uniqueIps.length}</div>
                   <div className="pbi-kpi-label">Unique IPs</div>
                 </div>
               </div>
+              <div className="pbi-event-filters">
+                <div className="pbi-filter-group">
+                  <label className="pbi-filter-label">Type</label>
+                  <select className="pbi-filter-select" value={eventFilterType} onChange={e => setEventFilterType(e.target.value)}>
+                    <option value="all">All</option>
+                    {eventTypes.map(t => <option key={t} value={t}>{t}</option>)}
+                  </select>
+                </div>
+                <div className="pbi-filter-group">
+                  <label className="pbi-filter-label">Page</label>
+                  <select className="pbi-filter-select" value={eventFilterPage} onChange={e => setEventFilterPage(e.target.value)}>
+                    <option value="all">All</option>
+                    {eventPages.map(p => <option key={p} value={p}>{p || '/'}</option>)}
+                  </select>
+                </div>
+                <div className="pbi-filter-group">
+                  <label className="pbi-filter-label">Device</label>
+                  <select className="pbi-filter-select" value={eventFilterDevice} onChange={e => setEventFilterDevice(e.target.value)}>
+                    <option value="all">All</option>
+                    {eventDevices.map(d => <option key={d} value={d}>{d}</option>)}
+                  </select>
+                </div>
+                <div className="pbi-filter-group">
+                  <label className="pbi-filter-label">Browser</label>
+                  <select className="pbi-filter-select" value={eventFilterBrowser} onChange={e => setEventFilterBrowser(e.target.value)}>
+                    <option value="all">All</option>
+                    {eventBrowsers.map(b => <option key={b} value={b}>{b}</option>)}
+                  </select>
+                </div>
+                {(eventFilterType !== 'all' || eventFilterPage !== 'all' || eventFilterDevice !== 'all' || eventFilterBrowser !== 'all') && (
+                  <button className="pbi-filter-clear" onClick={() => { setEventFilterType('all'); setEventFilterPage('all'); setEventFilterDevice('all'); setEventFilterBrowser('all') }}>
+                    Clear filters
+                  </button>
+                )}
+              </div>
               <div className="pbi-visual">
-                <div className="pbi-visual-header">Recent Events</div>
+                <div className="pbi-visual-header">
+                  {filteredEvents.length === events.length ? 'Recent Events' : `Filtered Events (${filteredEvents.length.toLocaleString()} of ${events.length.toLocaleString()})`}
+                </div>
                 <table className="pbi-table">
                   <thead><tr><th>Timestamp</th><th>Type</th><th>Page</th><th>Detail</th><th>IP</th><th>Device</th><th>Browser</th></tr></thead>
                   <tbody>
@@ -1100,6 +1152,9 @@ export default function Analytics() {
                         <td>{ev.browser || '-'}</td>
                       </tr>
                     ))}
+                    {recentEvents.length === 0 && (
+                      <tr><td colSpan={7} style={{ color: '#605E5C', textAlign: 'center' }}>No events match the current filters</td></tr>
+                    )}
                   </tbody>
                 </table>
               </div>
