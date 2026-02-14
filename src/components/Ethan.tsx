@@ -213,8 +213,8 @@ export default function Ethan() {
   const location = useLocation()
   const navigate = useNavigate()
 
-  // Hide Ethan on portal and analytics pages
-  if (HIDDEN_PATHS.includes(location.pathname)) return null
+  const isHidden = HIDDEN_PATHS.includes(location.pathname)
+
   const [pos, setPos] = useState(() => ({
     x: window.innerWidth - 120 + window.scrollX,
     y: window.innerHeight - 160 + window.scrollY,
@@ -445,6 +445,9 @@ export default function Ethan() {
     setMinimized(true)
     setBubble(null)
   }
+
+  // Hide Ethan on portal and analytics pages (after all hooks)
+  if (isHidden) return null
 
   if (minimized) {
     return (
