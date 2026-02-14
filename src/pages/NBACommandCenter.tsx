@@ -14,6 +14,16 @@ import {
   type Player,
   type PlayerGroup,
 } from '../lib/utils/espnApi'
+import {
+  getOddsApiKey,
+  setOddsApiKey,
+  fetchPlayerProps,
+  fetchOddsEvents,
+  oddsToConfidence,
+  getPropMarkets,
+  SPORT_KEY_NBA,
+  type PlayerProp,
+} from '../lib/utils/oddsApi'
 import '../styles/NBACommandCenter.css'
 
 const REFRESH_INTERVAL = 30_000
@@ -41,6 +51,19 @@ export default function NBACommandCenter() {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const searchTimeout = useRef<ReturnType<typeof setTimeout> | null>(null)
 
+  // Player props modal state
+  const [propsModalPlayer, setPropsModalPlayer] = useState<Player | null>(null)
+  const [playerPropsData, setPlayerPropsData] = useState<PlayerProp[]>([])
+  const [propsLoading, setPropsLoading] = useState(false)
+  const [propsError, setPropsError] = useState('')
+
+  // API key state
+  const [showApiKeyInput, setShowApiKeyInput] = useState(false)
+  const [apiKeyDraft, setApiKeyDraft] = useState(getOddsApiKey())
+
+  // Odds events cache for mapping ESPN games to Odds API events
+  const [oddsEvents, setOddsEvents] = useState<{ id: string; homeTeam: string; awayTeam: string }[]>([])
+
   const refreshData = useCallback(async () => {
     try {
       const data = await fetchScoreboard()
@@ -59,6 +82,14 @@ export default function NBACommandCenter() {
     intervalRef.current = setInterval(refreshData, REFRESH_INTERVAL)
     return () => { if (intervalRef.current) clearInterval(intervalRef.current) }
   }, [refreshData])
+
+  // Load odds events when API key is set
+  useEffect(() => {
+    if (!getOddsApiKey()) return
+    fetchOddsEvents(SPORT_KEY_NBA)
+      .then(setOddsEvents)
+      .catch(() => {})
+  }, [])
 
   // persist groups
   useEffect(() => { saveGroups(groups) }, [groups])
@@ -145,9 +176,71 @@ export default function NBACommandCenter() {
     refreshData()
   }
 
+  const saveApiKey = () => {
+    setOddsApiKey(apiKeyDraft)
+    setShowApiKeyInput(false)
+    // Reload events with new key
+    fetchOddsEvents(SPORT_KEY_NBA)
+      .then(setOddsEvents)
+      .catch(() => {})
+  }
+
+  // Open player props modal
+  const openPlayerProps = async (player: Player) => {
+    setPropsModalPlayer(player)
+    setPlayerPropsData([])
+    setPropsError('')
+
+    if (!getOddsApiKey()) {
+      setPropsError('Set your Odds API key to view player props.')
+      return
+    }
+
+    setPropsLoading(true)
+    try {
+      // Find the matching odds event for this player's team game
+      const playerGames = findPlayerGames(games, player)
+      if (playerGames.length === 0) {
+        setPropsError('No game found for this player today.')
+        setPropsLoading(false)
+        return
+      }
+
+      const game = playerGames[0]
+      // Match to odds API event by team name
+      const oddsEvent = oddsEvents.find(e =>
+        game.homeTeam.name.includes(e.homeTeam.split(' ').pop() || '') ||
+        e.homeTeam.includes(game.homeTeam.name.split(' ').pop() || '') ||
+        game.awayTeam.name.includes(e.awayTeam.split(' ').pop() || '') ||
+        e.awayTeam.includes(game.awayTeam.name.split(' ').pop() || '')
+      )
+
+      if (!oddsEvent) {
+        setPropsError('Could not match game to odds provider. Props may not be available yet.')
+        setPropsLoading(false)
+        return
+      }
+
+      const props = await fetchPlayerProps(SPORT_KEY_NBA, oddsEvent.id, getPropMarkets(SPORT_KEY_NBA))
+      // Filter props to this player
+      const playerName = player.fullName.toLowerCase()
+      const filtered = props.filter(p => p.playerName.toLowerCase().includes(playerName) || playerName.includes(p.playerName.toLowerCase()))
+
+      if (filtered.length === 0) {
+        setPropsError(`No props available for ${player.fullName}.`)
+      }
+      setPlayerPropsData(filtered)
+    } catch {
+      setPropsError('Failed to load player props.')
+    } finally {
+      setPropsLoading(false)
+    }
+  }
+
   const liveGames = games.filter(isGameLive)
   const scheduledGames = games.filter(g => !isGameLive(g) && !g.status.type.completed)
   const completedGames = games.filter(g => g.status.type.completed)
+  const hasApiKey = !!getOddsApiKey()
 
   return (
     <div className="nba-page">
@@ -162,11 +255,36 @@ export default function NBACommandCenter() {
           {lastUpdated && <>Updated {lastUpdated.toLocaleTimeString()}</>}
           <span className="nba-auto-label">Auto-refresh 30s</span>
         </div>
-        <button className="nba-refresh-btn" onClick={manualRefresh} disabled={loading}>
-          <span className={`nba-refresh-icon ${loading ? 'spinning' : ''}`}>&#x21bb;</span>
-          Refresh
-        </button>
+        <div className="nba-refresh-actions">
+          <button className="nba-api-key-btn" onClick={() => setShowApiKeyInput(!showApiKeyInput)}>
+            {hasApiKey ? '🔑 API Key Set' : '🔑 Set Odds API Key'}
+          </button>
+          <button className="nba-refresh-btn" onClick={manualRefresh} disabled={loading}>
+            <span className={`nba-refresh-icon ${loading ? 'spinning' : ''}`}>&#x21bb;</span>
+            Refresh
+          </button>
+        </div>
       </div>
+
+      {/* API Key input */}
+      {showApiKeyInput && (
+        <div className="nba-api-key-panel">
+          <p className="nba-api-key-info">
+            Enter your <a href="https://the-odds-api.com" target="_blank" rel="noreferrer">The Odds API</a> key for player props and betting odds. Free tier: 500 requests/month.
+          </p>
+          <div className="nba-api-key-row">
+            <input
+              type="password"
+              className="nba-api-key-input"
+              placeholder="Paste API key..."
+              value={apiKeyDraft}
+              onChange={e => setApiKeyDraft(e.target.value)}
+            />
+            <button className="nba-save-btn" onClick={saveApiKey}>Save</button>
+            <button className="nba-cancel-btn" onClick={() => setShowApiKeyInput(false)}>Cancel</button>
+          </div>
+        </div>
+      )}
 
       {/* Navigation tabs */}
       <div className="nba-tabs">
@@ -360,18 +478,22 @@ export default function NBACommandCenter() {
               const liveGame = playerGames.find(isGameLive)
               const nextGame = playerGames.find(g => !isGameLive(g) && !g.status.type.completed)
               const stats = playerStats[player.id]
+              const displayGame = liveGame || nextGame || playerGames.find(g => g.status.type.completed)
 
               return (
                 <div key={player.id} className={`nba-detail-card ${liveGame ? 'is-live' : ''}`}>
                   <div className="nba-detail-card-header">
-                    <div className="nba-detail-player-info">
+                    <div className="nba-detail-player-info" onClick={() => openPlayerProps(player)} style={{ cursor: 'pointer' }}>
                       <div className="nba-detail-avatar">
                         {player.headshot
                           ? <img src={player.headshot} alt="" />
                           : <div className="nba-avatar-placeholder-lg">{player.fullName.charAt(0)}</div>}
                       </div>
                       <div>
-                        <div className="nba-detail-player-name">{player.fullName}</div>
+                        <div className="nba-detail-player-name">
+                          {player.fullName}
+                          <span className="nba-props-hint">View Props →</span>
+                        </div>
                         <div className="nba-detail-player-meta">
                           {player.position} · {player.team.abbreviation}
                           {player.jersey && ` #${player.jersey}`}
@@ -403,6 +525,11 @@ export default function NBACommandCenter() {
                         <span className="nba-score-val">{liveGame.homeTeam.score}</span>
                       </div>
                     </div>
+                  )}
+
+                  {/* Game odds */}
+                  {displayGame?.odds && (
+                    <OddsDisplay odds={displayGame.odds} homeAbbr={displayGame.homeTeam.abbreviation} awayAbbr={displayGame.awayTeam.abbreviation} />
                   )}
 
                   {/* Player stat line */}
@@ -442,6 +569,121 @@ export default function NBACommandCenter() {
           </div>
         </div>
       )}
+
+      {/* ========== PLAYER PROPS MODAL ========== */}
+      {propsModalPlayer && (
+        <div className="nba-modal-overlay" onClick={() => setPropsModalPlayer(null)}>
+          <div className="nba-modal" onClick={e => e.stopPropagation()}>
+            <div className="nba-modal-header">
+              <div className="nba-modal-player-info">
+                {propsModalPlayer.headshot && <img src={propsModalPlayer.headshot} alt="" className="nba-modal-avatar" />}
+                <div>
+                  <div className="nba-modal-player-name">{propsModalPlayer.fullName}</div>
+                  <div className="nba-modal-player-meta">
+                    {propsModalPlayer.position} · {propsModalPlayer.team.abbreviation}
+                    {propsModalPlayer.jersey && ` #${propsModalPlayer.jersey}`}
+                  </div>
+                </div>
+              </div>
+              <button className="nba-modal-close" onClick={() => setPropsModalPlayer(null)}>&times;</button>
+            </div>
+
+            <h3 className="nba-modal-section-title">Player Props</h3>
+
+            {propsLoading && (
+              <div className="nba-loading">
+                <div className="nba-spinner" />
+                <p>Loading props...</p>
+              </div>
+            )}
+
+            {propsError && (
+              <div className="nba-props-error">
+                <p>{propsError}</p>
+                {!hasApiKey && (
+                  <button className="nba-save-btn" onClick={() => { setPropsModalPlayer(null); setShowApiKeyInput(true) }}>
+                    Set API Key
+                  </button>
+                )}
+              </div>
+            )}
+
+            {!propsLoading && playerPropsData.length > 0 && (
+              <div className="nba-props-list">
+                {playerPropsData.map((prop, i) => (
+                  <div key={i} className="nba-prop-card">
+                    <div className="nba-prop-header">
+                      <span className="nba-prop-market">{prop.description}</span>
+                      <span className="nba-prop-line">Line: {prop.line}</span>
+                    </div>
+                    <div className="nba-prop-odds-row">
+                      <div className={`nba-prop-side ${prop.overConfidence >= 50 ? 'favored' : ''}`}>
+                        <span className="nba-prop-direction">OVER</span>
+                        <span className="nba-prop-odds-value">{prop.overOdds > 0 ? '+' : ''}{prop.overOdds}</span>
+                        <div className="nba-confidence-bar">
+                          <div className="nba-confidence-fill over" style={{ width: `${prop.overConfidence}%` }} />
+                        </div>
+                        <span className="nba-confidence-pct">{prop.overConfidence}%</span>
+                      </div>
+                      <div className={`nba-prop-side ${prop.underConfidence >= 50 ? 'favored' : ''}`}>
+                        <span className="nba-prop-direction">UNDER</span>
+                        <span className="nba-prop-odds-value">{prop.underOdds > 0 ? '+' : ''}{prop.underOdds}</span>
+                        <div className="nba-confidence-bar">
+                          <div className="nba-confidence-fill under" style={{ width: `${prop.underConfidence}%` }} />
+                        </div>
+                        <span className="nba-confidence-pct">{prop.underConfidence}%</span>
+                      </div>
+                    </div>
+                    <div className="nba-prop-bookmaker">via {prop.bookmaker}</div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+function OddsDisplay({ odds, homeAbbr, awayAbbr }: { odds: Game['odds']; homeAbbr: string; awayAbbr: string }) {
+  if (!odds) return null
+  return (
+    <div className="nba-odds-display">
+      <h4>Odds</h4>
+      <div className="nba-odds-grid">
+        {odds.spread && (
+          <div className="nba-odds-item">
+            <span className="nba-odds-label">Spread</span>
+            <span className="nba-odds-value">{odds.spread.team} {Number(odds.spread.line) > 0 ? '+' : ''}{odds.spread.line}</span>
+          </div>
+        )}
+        {odds.moneyLine && (
+          <>
+            <div className="nba-odds-item">
+              <span className="nba-odds-label">{awayAbbr} ML</span>
+              <span className="nba-odds-value">
+                {Number(odds.moneyLine.away) > 0 ? '+' : ''}{odds.moneyLine.away}
+                <span className="nba-odds-conf">{oddsToConfidence(Number(odds.moneyLine.away))}%</span>
+              </span>
+            </div>
+            <div className="nba-odds-item">
+              <span className="nba-odds-label">{homeAbbr} ML</span>
+              <span className="nba-odds-value">
+                {Number(odds.moneyLine.home) > 0 ? '+' : ''}{odds.moneyLine.home}
+                <span className="nba-odds-conf">{oddsToConfidence(Number(odds.moneyLine.home))}%</span>
+              </span>
+            </div>
+          </>
+        )}
+        {odds.overUnder && (
+          <div className="nba-odds-item">
+            <span className="nba-odds-label">O/U</span>
+            <span className="nba-odds-value">{odds.overUnder}</span>
+          </div>
+        )}
+      </div>
+      {odds.provider && <div className="nba-odds-provider">via {odds.provider}</div>}
     </div>
   )
 }
@@ -477,6 +719,24 @@ function GameCard({ game }: { game: Game }) {
           <span className="nba-team-score">{game.homeTeam.score}</span>
         </div>
       </div>
+      {/* Game odds inline */}
+      {game.odds && (
+        <div className="nba-game-odds-bar">
+          {game.odds.spread && (
+            <span className="nba-game-odds-chip">
+              {game.odds.spread.team} {Number(game.odds.spread.line) > 0 ? '+' : ''}{game.odds.spread.line}
+            </span>
+          )}
+          {game.odds.moneyLine && (
+            <span className="nba-game-odds-chip">
+              ML: {Number(game.odds.moneyLine.away) > 0 ? '+' : ''}{game.odds.moneyLine.away} / {Number(game.odds.moneyLine.home) > 0 ? '+' : ''}{game.odds.moneyLine.home}
+            </span>
+          )}
+          {game.odds.overUnder && (
+            <span className="nba-game-odds-chip">O/U {game.odds.overUnder}</span>
+          )}
+        </div>
+      )}
     </div>
   )
 }

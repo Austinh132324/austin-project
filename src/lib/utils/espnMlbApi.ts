@@ -1,13 +1,13 @@
-const BASE = 'https://site.api.espn.com/apis/site/v2/sports/basketball/nba'
+const BASE = 'https://site.api.espn.com/apis/site/v2/sports/baseball/mlb'
 
-export interface GameOdds {
+export interface MlbGameOdds {
   spread: { team: string; line: string } | null
   moneyLine: { home: string; away: string } | null
   overUnder: string | null
   provider: string
 }
 
-export interface Game {
+export interface MlbGame {
   id: string
   status: {
     type: { name: string; completed: boolean }
@@ -15,13 +15,13 @@ export interface Game {
     displayClock: string
     detailText: string
   }
-  homeTeam: TeamInfo
-  awayTeam: TeamInfo
+  homeTeam: MlbTeamInfo
+  awayTeam: MlbTeamInfo
   startTime: string
-  odds: GameOdds | null
+  odds: MlbGameOdds | null
 }
 
-export interface TeamInfo {
+export interface MlbTeamInfo {
   id: string
   name: string
   abbreviation: string
@@ -30,7 +30,7 @@ export interface TeamInfo {
   record: string
 }
 
-export interface Player {
+export interface MlbPlayer {
   id: string
   fullName: string
   position: string
@@ -39,7 +39,7 @@ export interface Player {
   jersey?: string
 }
 
-export interface PlayerStatLine {
+export interface MlbPlayerStatLine {
   playerId: string
   gameId: string
   stats: Record<string, string>
@@ -48,20 +48,20 @@ export interface PlayerStatLine {
   gameStatus: string
 }
 
-export interface PlayerGroup {
+export interface MlbPlayerGroup {
   id: string
   name: string
   playerIds: string[]
-  players: Player[]
+  players: MlbPlayer[]
   createdAt: number
 }
 
-function parseOdds(comp: any): GameOdds | null {
+function parseOdds(comp: any): MlbGameOdds | null {
   const oddsArr = comp?.odds
   if (!oddsArr || oddsArr.length === 0) return null
   const primary = oddsArr[0]
 
-  let spread: GameOdds['spread'] = null
+  let spread: MlbGameOdds['spread'] = null
   if (primary.spread !== undefined) {
     spread = {
       team: primary.spreadTeam?.abbreviation || primary.details || '',
@@ -69,7 +69,7 @@ function parseOdds(comp: any): GameOdds | null {
     }
   }
 
-  let moneyLine: GameOdds['moneyLine'] = null
+  let moneyLine: MlbGameOdds['moneyLine'] = null
   if (primary.homeTeamOdds?.moneyLine || primary.awayTeamOdds?.moneyLine) {
     moneyLine = {
       home: String(primary.homeTeamOdds?.moneyLine || ''),
@@ -85,7 +85,7 @@ function parseOdds(comp: any): GameOdds | null {
   }
 }
 
-function parseGame(event: any): Game {
+function parseGame(event: any): MlbGame {
   const comp = event.competitions?.[0]
   const home = comp?.competitors?.find((c: any) => c.homeAway === 'home')
   const away = comp?.competitors?.find((c: any) => c.homeAway === 'away')
@@ -118,36 +118,13 @@ function parseGame(event: any): Game {
   }
 }
 
-export async function fetchScoreboard(): Promise<Game[]> {
+export async function fetchMlbScoreboard(): Promise<MlbGame[]> {
   const res = await fetch(`${BASE}/scoreboard`)
   const data = await res.json()
   return (data.events || []).map(parseGame)
 }
 
-export async function fetchPlayers(page = 1, limit = 500): Promise<{ players: Player[]; total: number }> {
-  const res = await fetch(`${BASE}/athletes?limit=${limit}&page=${page}`)
-  const data = await res.json()
-  const athletes = data.athletes || data.items || []
-  const total = data.count || data.resultCount || athletes.length
-
-  const players: Player[] = athletes.map((a: any) => ({
-    id: a.id,
-    fullName: a.fullName || a.displayName || '',
-    position: a.position?.abbreviation || a.position?.name || '',
-    team: {
-      id: a.team?.id || '',
-      name: a.team?.displayName || a.team?.name || '',
-      abbreviation: a.team?.abbreviation || '',
-      logo: a.team?.logo || '',
-    },
-    headshot: a.headshot?.href || '',
-    jersey: a.jersey || '',
-  }))
-
-  return { players, total }
-}
-
-export async function searchPlayers(query: string): Promise<Player[]> {
+export async function searchMlbPlayers(query: string): Promise<MlbPlayer[]> {
   const res = await fetch(`${BASE}/athletes?limit=50&search=${encodeURIComponent(query)}`)
   const data = await res.json()
   const athletes = data.athletes || data.items || []
@@ -167,12 +144,12 @@ export async function searchPlayers(query: string): Promise<Player[]> {
   }))
 }
 
-export async function fetchGameSummary(gameId: string): Promise<any> {
+export async function fetchMlbGameSummary(gameId: string): Promise<any> {
   const res = await fetch(`${BASE}/summary?event=${gameId}`)
   return res.json()
 }
 
-export function extractPlayerStats(summary: any, playerId: string): Record<string, string> | null {
+export function extractMlbPlayerStats(summary: any, playerId: string): Record<string, string> | null {
   const boxscore = summary?.boxscore
   if (!boxscore?.players) return null
 
@@ -193,35 +170,35 @@ export function extractPlayerStats(summary: any, playerId: string): Record<strin
   return null
 }
 
-const GROUPS_KEY = 'nba-command-center-groups'
+const GROUPS_KEY = 'mlb-command-center-groups'
 
-export function loadGroups(): PlayerGroup[] {
+export function loadMlbGroups(): MlbPlayerGroup[] {
   try {
     return JSON.parse(localStorage.getItem(GROUPS_KEY) || '[]')
   } catch { return [] }
 }
 
-export function saveGroups(groups: PlayerGroup[]) {
+export function saveMlbGroups(groups: MlbPlayerGroup[]) {
   localStorage.setItem(GROUPS_KEY, JSON.stringify(groups))
 }
 
-export function isGameLive(game: Game): boolean {
+export function isMlbGameLive(game: MlbGame): boolean {
   const name = game.status.type.name
   return name === 'STATUS_IN_PROGRESS' || name === 'STATUS_HALFTIME'
 }
 
-export function getGameStatusText(game: Game): string {
-  if (isGameLive(game)) {
-    if (game.status.type.name === 'STATUS_HALFTIME') return 'Halftime'
-    const q = game.status.period
-    const clock = game.status.displayClock
-    return `Q${q} ${clock}`
+export function getMlbGameStatusText(game: MlbGame): string {
+  if (isMlbGameLive(game)) {
+    const inning = game.status.period
+    const half = game.status.displayClock
+    if (half) return `${half} ${inning}`
+    return game.status.detailText || `Inning ${inning}`
   }
   if (game.status.type.completed) return 'Final'
   return game.status.detailText || 'Scheduled'
 }
 
-export function findPlayerGames(games: Game[], player: Player): Game[] {
+export function findMlbPlayerGames(games: MlbGame[], player: MlbPlayer): MlbGame[] {
   return games.filter(g =>
     g.homeTeam.id === player.team.id || g.awayTeam.id === player.team.id
   )

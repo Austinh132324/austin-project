@@ -15,6 +15,7 @@ describe('Tools', () => {
     expect(screen.getByText('Color Palette')).toBeInTheDocument()
     expect(screen.getByText('Music Visualizer')).toBeInTheDocument()
     expect(screen.getByText('NBA Command Center')).toBeInTheDocument()
+    expect(screen.getByText('MLB Command Center')).toBeInTheDocument()
   })
 
   it('renders the page title', () => {
