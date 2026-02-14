@@ -53,6 +53,8 @@ function ClickTracker() {
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       const target = e.target as HTMLElement
+      // Skip clicks inside the analytics dashboard to avoid self-tracking
+      if (target.closest('.pbi-dashboard')) return
       const link = target.closest('a, button')
       if (link) {
         const label = link.textContent?.trim().slice(0, 50) || link.tagName

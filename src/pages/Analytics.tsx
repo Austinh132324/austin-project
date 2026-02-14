@@ -266,7 +266,57 @@ const PBI = {
   gray: '#605E5C',
 }
 
-type NavSection = 'overview' | 'pageviews' | 'clicks' | 'visitors' | 'hourly' | 'events'
+function getWeeklyCounts(events: AnalyticsEvent[]): Record<string, { events: number; visitors: number; pageviews: number; clicks: number }> {
+  const weeks: Record<string, { events: number; visitors: Set<string>; pageviews: number; clicks: number }> = {}
+  for (const e of events) {
+    const d = new Date(e.timestamp)
+    const day = d.getDay()
+    const diff = d.getDate() - day + (day === 0 ? -6 : 1) // Monday start
+    const monday = new Date(d)
+    monday.setDate(diff)
+    const key = monday.toISOString().slice(0, 10)
+    if (!weeks[key]) weeks[key] = { events: 0, visitors: new Set(), pageviews: 0, clicks: 0 }
+    weeks[key].events++
+    if (e.visitorId) weeks[key].visitors.add(e.visitorId)
+    if (e.type === 'pageview') weeks[key].pageviews++
+    if (e.type === 'click') weeks[key].clicks++
+  }
+  const result: Record<string, { events: number; visitors: number; pageviews: number; clicks: number }> = {}
+  for (const [k, v] of Object.entries(weeks)) result[k] = { events: v.events, visitors: v.visitors.size, pageviews: v.pageviews, clicks: v.clicks }
+  return result
+}
+
+function getMonthlyCounts(events: AnalyticsEvent[]): Record<string, { events: number; visitors: number; pageviews: number; clicks: number }> {
+  const months: Record<string, { events: number; visitors: Set<string>; pageviews: number; clicks: number }> = {}
+  for (const e of events) {
+    const key = new Date(e.timestamp).toISOString().slice(0, 7)
+    if (!months[key]) months[key] = { events: 0, visitors: new Set(), pageviews: 0, clicks: 0 }
+    months[key].events++
+    if (e.visitorId) months[key].visitors.add(e.visitorId)
+    if (e.type === 'pageview') months[key].pageviews++
+    if (e.type === 'click') months[key].clicks++
+  }
+  const result: Record<string, { events: number; visitors: number; pageviews: number; clicks: number }> = {}
+  for (const [k, v] of Object.entries(months)) result[k] = { events: v.events, visitors: v.visitors.size, pageviews: v.pageviews, clicks: v.clicks }
+  return result
+}
+
+function getDailyBreakdown(events: AnalyticsEvent[]): Record<string, { events: number; visitors: number; pageviews: number; clicks: number }> {
+  const days: Record<string, { events: number; visitors: Set<string>; pageviews: number; clicks: number }> = {}
+  for (const e of events) {
+    const key = new Date(e.timestamp).toISOString().slice(0, 10)
+    if (!days[key]) days[key] = { events: 0, visitors: new Set(), pageviews: 0, clicks: 0 }
+    days[key].events++
+    if (e.visitorId) days[key].visitors.add(e.visitorId)
+    if (e.type === 'pageview') days[key].pageviews++
+    if (e.type === 'click') days[key].clicks++
+  }
+  const result: Record<string, { events: number; visitors: number; pageviews: number; clicks: number }> = {}
+  for (const [k, v] of Object.entries(days)) result[k] = { events: v.events, visitors: v.visitors.size, pageviews: v.pageviews, clicks: v.clicks }
+  return result
+}
+
+type NavSection = 'overview' | 'pageviews' | 'clicks' | 'visitors' | 'hourly' | 'history' | 'events'
 
 const NAV_ITEMS: { id: NavSection; label: string; icon: string }[] = [
   { id: 'overview', label: 'Overview', icon: '\u2302' },
@@ -274,6 +324,7 @@ const NAV_ITEMS: { id: NavSection; label: string; icon: string }[] = [
   { id: 'clicks', label: 'Clicks', icon: '\uD83D\uDDB1' },
   { id: 'visitors', label: 'Visitors', icon: '\uD83D\uDCC8' },
   { id: 'hourly', label: 'Hourly Activity', icon: '\u23F0' },
+  { id: 'history', label: 'History', icon: '\uD83D\uDCC5' },
   { id: 'events', label: 'Event Log', icon: '\uD83D\uDCCB' },
 ]
 
@@ -283,6 +334,7 @@ export default function Analytics() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [lastRefresh, setLastRefresh] = useState(Date.now())
   const [refreshing, setRefreshing] = useState(false)
+  const [historyPeriod, setHistoryPeriod] = useState<'daily' | 'weekly' | 'monthly'>('daily')
   const [dataSource, setDataSource] = useState<'local' | 'supabase'>('local')
   const [sbStatus, setSbStatus] = useState<'checking' | 'connected' | 'disconnected'>('checking')
   const [reconnecting, setReconnecting] = useState(false)
@@ -938,6 +990,82 @@ export default function Analytics() {
               </div>
             </>
           )}
+
+          {/* HISTORY */}
+          {activeSection === 'history' && (() => {
+            const daily = getDailyBreakdown(events)
+            const weekly = getWeeklyCounts(events)
+            const monthly = getMonthlyCounts(events)
+            const data = historyPeriod === 'daily' ? daily : historyPeriod === 'weekly' ? weekly : monthly
+            const entries = Object.entries(data).sort((a, b) => b[0].localeCompare(a[0]))
+            const totalEvents = entries.reduce((s, [, v]) => s + v.events, 0)
+            const totalPeriods = entries.length
+            const avgEvents = totalPeriods > 0 ? (totalEvents / totalPeriods).toFixed(1) : '0'
+            return (
+              <>
+                <div className="pbi-kpi-row">
+                  <div className="pbi-kpi" style={{ '--kpi-accent': PBI.blue } as React.CSSProperties}>
+                    <div className="pbi-kpi-value">{totalPeriods}</div>
+                    <div className="pbi-kpi-label">{historyPeriod === 'daily' ? 'Days' : historyPeriod === 'weekly' ? 'Weeks' : 'Months'} Tracked</div>
+                  </div>
+                  <div className="pbi-kpi" style={{ '--kpi-accent': PBI.green } as React.CSSProperties}>
+                    <div className="pbi-kpi-value">{totalEvents.toLocaleString()}</div>
+                    <div className="pbi-kpi-label">Total Events</div>
+                  </div>
+                  <div className="pbi-kpi" style={{ '--kpi-accent': PBI.orange } as React.CSSProperties}>
+                    <div className="pbi-kpi-value">{avgEvents}</div>
+                    <div className="pbi-kpi-label">Avg Events / {historyPeriod === 'daily' ? 'Day' : historyPeriod === 'weekly' ? 'Week' : 'Month'}</div>
+                  </div>
+                </div>
+                <div className="pbi-visual">
+                  <div className="pbi-visual-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span>{historyPeriod === 'daily' ? 'Daily' : historyPeriod === 'weekly' ? 'Weekly' : 'Monthly'} History</span>
+                    <div className="pbi-period-toggle">
+                      {(['daily', 'weekly', 'monthly'] as const).map(p => (
+                        <button
+                          key={p}
+                          className={`pbi-period-btn ${historyPeriod === p ? 'active' : ''}`}
+                          onClick={() => setHistoryPeriod(p)}
+                        >
+                          {p.charAt(0).toUpperCase() + p.slice(1)}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  <table className="pbi-table">
+                    <thead>
+                      <tr>
+                        <th>{historyPeriod === 'daily' ? 'Date' : historyPeriod === 'weekly' ? 'Week Starting' : 'Month'}</th>
+                        <th>Events</th>
+                        <th>Page Views</th>
+                        <th>Clicks</th>
+                        <th>Visitors</th>
+                        <th>Activity</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {entries.map(([period, stats]) => {
+                        const maxEvents = Math.max(...entries.map(([, v]) => v.events), 1)
+                        return (
+                          <tr key={period}>
+                            <td className="pbi-table-bold">{period}</td>
+                            <td>{stats.events}</td>
+                            <td>{stats.pageviews}</td>
+                            <td>{stats.clicks}</td>
+                            <td>{stats.visitors}</td>
+                            <td><div className="pbi-bar-cell"><div className="pbi-bar-fill" style={{ width: `${(stats.events / maxEvents) * 100}%`, background: PBI.purple }} /></div></td>
+                          </tr>
+                        )
+                      })}
+                      {entries.length === 0 && (
+                        <tr><td colSpan={6} style={{ color: '#605E5C', textAlign: 'center' }}>No history data yet</td></tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </>
+            )
+          })()}
 
           {/* EVENTS */}
           {activeSection === 'events' && (
