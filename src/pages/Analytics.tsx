@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import StarField from '../components/StarField'
 import SEO from '../components/SEO'
-import { getSupabase, isSupabaseConfigured } from '../lib/utils/supabase'
+import { getSupabase, isSupabaseConfigured, pingSupabase } from '../lib/utils/supabase'
 import '../styles/Analytics.css'
 
 /* ─── Visitor ID ─── */
@@ -284,19 +284,42 @@ export default function Analytics() {
   const [lastRefresh, setLastRefresh] = useState(Date.now())
   const [refreshing, setRefreshing] = useState(false)
   const [dataSource, setDataSource] = useState<'local' | 'supabase'>('local')
+  const [sbStatus, setSbStatus] = useState<'checking' | 'connected' | 'disconnected'>('checking')
+  const [reconnecting, setReconnecting] = useState(false)
   const barCanvasRef = useRef<HTMLCanvasElement>(null)
   const lineCanvasRef = useRef<HTMLCanvasElement>(null)
   const clickCanvasRef = useRef<HTMLCanvasElement>(null)
   const hourCanvasRef = useRef<HTMLCanvasElement>(null)
   const visitorCanvasRef = useRef<HTMLCanvasElement>(null)
 
+  const checkConnection = useCallback(async () => {
+    if (!isSupabaseConfigured()) { setSbStatus('disconnected'); return false }
+    setSbStatus('checking')
+    const ok = await pingSupabase()
+    setSbStatus(ok ? 'connected' : 'disconnected')
+    return ok
+  }, [])
+
+  const handleReconnect = useCallback(async () => {
+    setReconnecting(true)
+    const ok = await checkConnection()
+    if (ok) {
+      const evts = await loadAllEvents()
+      setEvents(evts)
+      setDataSource('supabase')
+      setLastRefresh(Date.now())
+    }
+    setReconnecting(false)
+  }, [checkConnection])
+
   // Load from Supabase on mount (localStorage is the initial quick render)
   useEffect(() => {
+    checkConnection()
     loadAllEvents().then(evts => {
       setEvents(evts)
       setDataSource(isSupabaseConfigured() && evts.length > 0 ? 'supabase' : 'local')
     })
-  }, [])
+  }, [checkConnection])
 
   const refreshData = useCallback(() => {
     setRefreshing(true)
@@ -609,8 +632,28 @@ export default function Analytics() {
               </svg>
               <span className="pbi-refresh-label">Refresh</span>
             </button>
-            <span className={`pbi-data-source ${dataSource === 'supabase' ? 'pbi-source-cloud' : 'pbi-source-local'}`}>
-              {dataSource === 'supabase' ? 'Cloud' : 'Local'}
+            <span className="pbi-connection-status" title={
+              sbStatus === 'connected' ? 'Supabase connected' :
+              sbStatus === 'checking' ? 'Checking connection...' :
+              'Supabase disconnected'
+            }>
+              <span className={`pbi-status-dot ${sbStatus}`} />
+              <span className="pbi-status-label">
+                {sbStatus === 'connected' ? 'Cloud' : sbStatus === 'checking' ? '...' : 'Local'}
+              </span>
+              {sbStatus === 'disconnected' && (
+                <button
+                  className={`pbi-reconnect-btn ${reconnecting ? 'spinning' : ''}`}
+                  onClick={handleReconnect}
+                  disabled={reconnecting}
+                  title="Retry connection"
+                >
+                  <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M14 8A6 6 0 1 1 8 2" strokeLinecap="round" />
+                    <path d="M8 0L10.5 2.5L8 5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </button>
+              )}
             </span>
             <span className="pbi-ribbon-meta">
               Last updated: {new Date(lastRefresh).toLocaleTimeString()}

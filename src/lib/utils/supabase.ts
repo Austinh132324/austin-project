@@ -16,3 +16,13 @@ export function getSupabase(): SupabaseClient | null {
 export function isSupabaseConfigured(): boolean {
   return supabase !== null
 }
+
+export async function pingSupabase(): Promise<boolean> {
+  if (!supabase) return false
+  try {
+    const { error } = await supabase.from('analytics_events').select('id', { count: 'exact', head: true })
+    return !error
+  } catch {
+    return false
+  }
+}

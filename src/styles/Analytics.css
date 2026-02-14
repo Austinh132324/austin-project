@@ -191,22 +191,78 @@
   line-height: 1;
 }
 
-/* Data source indicator */
-.pbi-data-source {
+/* Connection status indicator */
+.pbi-connection-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   padding: 3px 10px;
   border-radius: 4px;
+  background: rgba(255, 255, 255, 0.04);
+}
+.pbi-status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  position: relative;
+}
+.pbi-status-dot.connected {
+  background: #2ecc71;
+  box-shadow: 0 0 6px rgba(46, 204, 113, 0.6);
+  animation: pulse-green 2s ease-in-out infinite;
+}
+.pbi-status-dot.disconnected {
+  background: #e74c3c;
+  box-shadow: 0 0 6px rgba(231, 76, 60, 0.6);
+  animation: pulse-red 2s ease-in-out infinite;
+}
+.pbi-status-dot.checking {
+  background: #f39c12;
+  box-shadow: 0 0 6px rgba(243, 156, 18, 0.5);
+  animation: pulse-yellow 1s ease-in-out infinite;
+}
+@keyframes pulse-green {
+  0%, 100% { box-shadow: 0 0 4px rgba(46, 204, 113, 0.4); }
+  50%      { box-shadow: 0 0 12px rgba(46, 204, 113, 0.8); }
+}
+@keyframes pulse-red {
+  0%, 100% { box-shadow: 0 0 4px rgba(231, 76, 60, 0.4); }
+  50%      { box-shadow: 0 0 12px rgba(231, 76, 60, 0.8); }
+}
+@keyframes pulse-yellow {
+  0%, 100% { box-shadow: 0 0 4px rgba(243, 156, 18, 0.3); }
+  50%      { box-shadow: 0 0 10px rgba(243, 156, 18, 0.7); }
+}
+.pbi-status-label {
   font-size: 0.65rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  color: #D2D0CE;
 }
-.pbi-source-cloud {
-  background: rgba(18, 181, 203, 0.12);
-  color: #12B5CB;
+.pbi-reconnect-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: 1px solid rgba(231, 76, 60, 0.3);
+  border-radius: 4px;
+  color: #e74c3c;
+  cursor: pointer;
+  padding: 2px 4px;
+  transition: border-color 0.2s, color 0.2s;
 }
-.pbi-source-local {
-  background: rgba(242, 200, 15, 0.1);
-  color: #F2C80F;
+.pbi-reconnect-btn:hover {
+  border-color: #e74c3c;
+  color: #fff;
+}
+.pbi-reconnect-btn.spinning svg {
+  animation: pbi-spin 0.6s linear infinite;
+}
+.pbi-reconnect-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 /* Scrollable content area */
