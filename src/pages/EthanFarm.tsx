@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { Link } from 'react-router-dom'
+import SEO from '../components/SEO'
 import '../styles/EthanFarm.css'
 
 /* ── Waypoints Ethan walks between on his farm ── */
@@ -223,6 +224,7 @@ export default function EthanFarm() {
 
   return (
     <div className="farm-page">
+      <SEO title="Ethan Farm" description="Virtual farm game" />
       {/* Sky */}
       <div className="farm-sky">
         <div className="farm-sun" />

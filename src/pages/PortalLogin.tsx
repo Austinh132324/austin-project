@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
+import SEO from '../components/SEO'
 import StarField from '../components/StarField'
 import Navbar from '../components/Navbar'
 import { login, isAuthenticated } from '../lib/utils/auth'
@@ -34,6 +35,7 @@ export default function PortalLogin() {
 
   return (
     <>
+    <SEO title="Portal Login" description="Sign in to the admin portal" />
     <StarField shootingStars nebulaOrbs />
     <Navbar />
     <div className="portal-login-page">

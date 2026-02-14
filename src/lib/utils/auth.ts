@@ -1,13 +1,29 @@
 const SESSION_KEY = 'portal-session'
 
-const CREDENTIALS = {
-  email: 'littledawgar@hotmail.com',
-  password: 'Austinh99',
+export type UserRole = 'admin' | 'editor' | 'viewer'
+
+interface UserAccount {
+  email: string
+  password: string
+  role: UserRole
 }
 
+const ACCOUNTS: UserAccount[] = [
+  { email: 'littledawgar@hotmail.com', password: 'Austinh99', role: 'admin' },
+  { email: 'editor@austinshowell.dev', password: 'Editor123', role: 'editor' },
+  { email: 'viewer@austinshowell.dev', password: 'Viewer123', role: 'viewer' },
+]
+
 export function login(email: string, password: string): boolean {
-  if (email.toLowerCase().trim() === CREDENTIALS.email && password === CREDENTIALS.password) {
-    localStorage.setItem(SESSION_KEY, JSON.stringify({ email: CREDENTIALS.email, ts: Date.now() }))
+  const account = ACCOUNTS.find(
+    a => a.email === email.toLowerCase().trim() && a.password === password
+  )
+  if (account) {
+    localStorage.setItem(SESSION_KEY, JSON.stringify({
+      email: account.email,
+      role: account.role,
+      ts: Date.now(),
+    }))
     return true
   }
   return false
@@ -41,4 +57,21 @@ export function getSessionEmail(): string | null {
   } catch {
     return null
   }
+}
+
+export function getSessionRole(): UserRole {
+  const raw = localStorage.getItem(SESSION_KEY)
+  if (!raw) return 'viewer'
+  try {
+    return JSON.parse(raw).role || 'viewer'
+  } catch {
+    return 'viewer'
+  }
+}
+
+export function hasPermission(required: UserRole): boolean {
+  if (!isAuthenticated()) return false
+  const role = getSessionRole()
+  const hierarchy: UserRole[] = ['viewer', 'editor', 'admin']
+  return hierarchy.indexOf(role) >= hierarchy.indexOf(required)
 }

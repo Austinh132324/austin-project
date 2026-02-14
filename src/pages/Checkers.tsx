@@ -1,5 +1,6 @@
 import { useRef, useEffect, useState, useCallback } from 'react'
 import { Link } from 'react-router-dom'
+import SEO from '../components/SEO'
 import '../styles/Checkers.css'
 
 /* ── Constants ── */
@@ -608,6 +609,7 @@ export default function Checkers() {
 
   return (
     <div className="checkers-page">
+      <SEO title="Checkers" description="Play Checkers in the browser" />
       <div className="checkers-top-bar">
         <Link to="/games" className="checkers-back-link">
           Games

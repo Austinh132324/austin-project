@@ -1,5 +1,6 @@
 import { useRef, useState, useCallback, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import SEO from '../components/SEO'
 import '../styles/MusicVisualizer.css'
 
 type VisMode = 'bars' | 'wave' | 'circular'
@@ -144,6 +145,7 @@ export default function MusicVisualizer() {
 
   return (
     <div className="viz-page">
+      <SEO title="Music Visualizer" description="Visualize audio with canvas animations" />
       <div className="viz-top-bar">
         <Link to="/tools" className="viz-back-link">Tools</Link>
         <h1>Music Visualizer</h1>

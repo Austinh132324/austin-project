@@ -1,10 +1,35 @@
 .lb-container { margin-top: 16px; width: 100%; max-width: 400px; }
-.lb-title { font-size: 1rem; font-weight: 700; color: #a478e8; margin-bottom: 12px; text-align: center; }
+.lb-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.lb-title { font-size: 1rem; font-weight: 700; color: #a478e8; margin: 0; }
+.lb-tabs { display: flex; gap: 4px; }
+.lb-tab {
+  padding: 4px 12px;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: transparent;
+  color: #a0a0b8;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.lb-tab:hover { color: #e0e0e0; }
+.lb-tab.active { background: rgba(164, 120, 232, 0.15); color: #a478e8; border-color: rgba(164, 120, 232, 0.3); }
 .lb-list { display: flex; flex-direction: column; gap: 6px; }
 .lb-entry { display: flex; align-items: center; gap: 12px; padding: 8px 12px; border-radius: 8px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); font-size: 0.85rem; }
 .lb-entry.top { border-color: rgba(233,69,96,0.2); }
 .lb-rank { font-weight: 700; width: 32px; text-align: center; }
 .lb-name { flex: 1; color: #e0e0e0; }
+.lb-streak {
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+  flex-shrink: 0;
+}
 .lb-score { font-weight: 700; color: #e94560; }
 .lb-date { font-size: 0.75rem; color: #606080; }
 .lb-empty { text-align: center; color: #606080; font-size: 0.85rem; margin-top: 16px; }
+.lb-empty-small { text-align: center; color: #606080; font-size: 0.8rem; padding: 16px; }

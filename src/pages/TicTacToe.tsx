@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react'
 import { Link } from 'react-router-dom'
+import SEO from '../components/SEO'
 import '../styles/TicTacToe.css'
 
 type Cell = 'X' | 'O' | null
@@ -170,6 +171,7 @@ export default function TicTacToe() {
 
   return (
     <div className="ttt-page">
+      <SEO title="Tic Tac Toe" description="Play Tic Tac Toe in the browser" />
       <div className="ttt-top-bar">
         <Link to="/games" className="ttt-back-link">Games</Link>
         <h1>Tic-Tac-Toe</h1>

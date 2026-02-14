@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import SEO from '../components/SEO'
 import '../styles/ColorPalette.css'
 
 interface PaletteColor {
@@ -103,6 +104,7 @@ export default function ColorPalette() {
 
   return (
     <div className="cp-page">
+      <SEO title="Color Palette" description="Generate harmonious color palettes" />
       <div className="cp-top-bar">
         <Link to="/tools" className="cp-back-link">Tools</Link>
         <h1>Color Palette</h1>

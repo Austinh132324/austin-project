@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom'
+import SEO from '../components/SEO'
 import '../styles/Pomodoro.css'
 
 type Mode = 'work' | 'shortBreak' | 'longBreak'
@@ -92,6 +93,7 @@ export default function Pomodoro() {
 
   return (
     <div className="pomo-page">
+      <SEO title="Pomodoro Timer" description="Focus timer with work and break sessions" />
       <div className="pomo-top-bar">
         <Link to="/tools" className="pomo-back-link">Tools</Link>
         <h1>Pomodoro</h1>

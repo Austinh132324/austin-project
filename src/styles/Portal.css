@@ -316,6 +316,166 @@
   color: var(--accent-purple-light);
 }
 
+/* Role badge */
+.portal-role-badge {
+  display: inline-block;
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-top: 10px;
+}
+
+/* Expanded manage card */
+.portal-manage-card.expanded {
+  grid-column: 1 / -1;
+}
+.portal-manage-card.locked {
+  opacity: 0.6;
+}
+.portal-expand-arrow {
+  margin-left: auto;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+/* Panels inside manage cards */
+.portal-panel {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-subtle);
+}
+.portal-panel-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.portal-panel-input {
+  flex: 1;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--border-subtle);
+  background: rgba(255,255,255,0.04);
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  outline: none;
+}
+.portal-panel-input:focus { border-color: var(--accent-red); }
+.portal-panel-btn {
+  padding: 8px 18px;
+  border-radius: 8px;
+  border: none;
+  background: var(--accent-red);
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+.portal-panel-btn:hover { opacity: 0.9; }
+.portal-panel-empty {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  text-align: center;
+  padding: 16px;
+}
+.portal-panel-note {
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  line-height: 1.5;
+  padding: 8px 0;
+}
+
+/* Content items */
+.portal-content-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border-subtle);
+}
+.portal-content-item:last-child { border-bottom: none; }
+.portal-content-status {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 2px 8px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+.portal-content-status.draft { background: rgba(245, 158, 11, 0.15); color: #f59e0b; }
+.portal-content-status.published { background: rgba(34, 197, 94, 0.15); color: #22c55e; }
+.portal-content-title { flex: 1; font-size: 0.9rem; }
+.portal-content-toggle {
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border-subtle);
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+.portal-content-toggle:hover { border-color: var(--accent-red); color: var(--accent-red); }
+.portal-content-delete {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 0 4px;
+}
+.portal-content-delete:hover { color: #ef4444; }
+
+/* Account rows */
+.portal-account-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border-subtle);
+}
+.portal-account-row:last-of-type { border-bottom: none; }
+.portal-account-label { font-size: 0.85rem; color: var(--text-muted); }
+.portal-account-value { font-size: 0.85rem; font-weight: 600; }
+
+/* Notification toggles */
+.portal-notif-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border-subtle);
+}
+.portal-notif-item:last-child { border-bottom: none; }
+.portal-notif-info { flex: 1; }
+.portal-notif-label { display: block; font-size: 0.9rem; font-weight: 600; }
+.portal-notif-desc { display: block; font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
+.portal-notif-toggle {
+  width: 44px;
+  height: 24px;
+  border-radius: 12px;
+  border: none;
+  background: rgba(255,255,255,0.1);
+  cursor: pointer;
+  position: relative;
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+.portal-notif-toggle.on { background: var(--accent-red); }
+.portal-notif-knob {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 0.2s;
+}
+.portal-notif-toggle.on .portal-notif-knob { transform: translateX(20px); }
+
 /* Responsive */
 @media (max-width: 500px) {
   .portal-login-card { padding: 24px 20px; }

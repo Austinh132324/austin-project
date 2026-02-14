@@ -1,5 +1,6 @@
 import { useRef, useEffect, useState, useCallback } from 'react'
 import { Link } from 'react-router-dom'
+import SEO from '../components/SEO'
 import '../styles/Snake.css'
 
 const ROWS = 20
@@ -215,6 +216,7 @@ export default function Snake() {
 
   return (
     <div className="snake-page">
+      <SEO title="Snake" description="Play Snake in the browser" />
       <div className="snake-top-bar">
         <Link to="/games" className="snake-back-link">Games</Link>
         <h1>Snake</h1>

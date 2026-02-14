@@ -80,6 +80,15 @@ const MARKET_LABELS: Record<string, string> = {
   pitcher_hits_allowed: 'Hits Allowed',
   pitcher_walks: 'Walks Allowed',
   pitcher_earned_runs: 'Earned Runs',
+  // NFL props
+  player_pass_yds: 'Pass Yards',
+  player_pass_tds: 'Pass TDs',
+  player_pass_completions: 'Completions',
+  player_rush_yds: 'Rush Yards',
+  player_rush_attempts: 'Rush Attempts',
+  player_reception_yds: 'Rec Yards',
+  player_receptions: 'Receptions',
+  player_anytime_td: 'Anytime TD',
 }
 
 function getMarketLabel(market: string): string {
@@ -89,6 +98,7 @@ function getMarketLabel(market: string): string {
 // Sport keys for The Odds API
 export const SPORT_KEY_NBA = 'basketball_nba'
 export const SPORT_KEY_MLB = 'baseball_mlb'
+export const SPORT_KEY_NFL = 'americanfootball_nfl'
 
 // Prop market keys to fetch
 const NBA_PROP_MARKETS = [
@@ -103,8 +113,17 @@ const MLB_PROP_MARKETS = [
   'player_stolen_bases',
 ]
 
+const NFL_PROP_MARKETS = [
+  'player_pass_yds', 'player_pass_tds', 'player_pass_completions',
+  'player_rush_yds', 'player_rush_attempts',
+  'player_reception_yds', 'player_receptions',
+  'player_anytime_td',
+]
+
 export function getPropMarkets(sport: string): string[] {
-  return sport === SPORT_KEY_MLB ? MLB_PROP_MARKETS : NBA_PROP_MARKETS
+  if (sport === SPORT_KEY_MLB) return MLB_PROP_MARKETS
+  if (sport === SPORT_KEY_NFL) return NFL_PROP_MARKETS
+  return NBA_PROP_MARKETS
 }
 
 // Fetch game odds (spreads, moneyline, totals) from The Odds API

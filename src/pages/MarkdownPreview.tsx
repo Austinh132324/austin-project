@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import SEO from '../components/SEO'
 import '../styles/MarkdownPreview.css'
 
 const SAMPLE = `# Markdown Previewer
@@ -71,6 +72,7 @@ export default function MarkdownPreview() {
 
   return (
     <div className="md-page">
+      <SEO title="Markdown Preview" description="Live markdown editor and previewer" />
       <div className="md-top-bar">
         <Link to="/tools" className="md-back-link">Tools</Link>
         <h1>Markdown Preview</h1>

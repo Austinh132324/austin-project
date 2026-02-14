@@ -1,5 +1,5 @@
-/* ======== NBA Command Center ======== */
-.nba-page {
+/* ======== NFL Command Center ======== */
+.nfl-page {
   max-width: 900px;
   margin: 0 auto;
   padding: 40px 20px 80px;
@@ -7,10 +7,10 @@
 }
 
 /* Top bar */
-.nba-top-bar {
+.nfl-top-bar {
   margin-bottom: 24px;
 }
-.nba-back-link {
+.nfl-back-link {
   display: inline-block;
   color: var(--text-secondary);
   text-decoration: none;
@@ -18,8 +18,8 @@
   transition: color 0.2s;
   margin-bottom: 16px;
 }
-.nba-back-link:hover { color: var(--accent-red); }
-.nba-title {
+.nfl-back-link:hover { color: var(--accent-red); }
+.nfl-title {
   font-size: clamp(2rem, 6vw, 3rem);
   font-weight: 800;
   background: linear-gradient(135deg, #e94560 0%, #a478e8 40%, #00e5ff 70%, #e94560 100%);
@@ -31,7 +31,7 @@
 }
 
 /* Refresh bar */
-.nba-refresh-bar {
+.nfl-refresh-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -43,14 +43,14 @@
   flex-wrap: wrap;
   gap: 8px;
 }
-.nba-last-updated {
+.nfl-last-updated {
   color: var(--text-secondary);
   font-size: 0.85rem;
   display: flex;
   align-items: center;
   gap: 12px;
 }
-.nba-auto-label {
+.nfl-auto-label {
   color: var(--text-muted);
   font-size: 0.75rem;
   padding: 2px 8px;
@@ -58,12 +58,12 @@
   background: rgba(255,255,255,0.04);
   border: 1px solid var(--border-subtle);
 }
-.nba-refresh-actions {
+.nfl-refresh-actions {
   display: flex;
   align-items: center;
   gap: 8px;
 }
-.nba-api-key-btn {
+.nfl-api-key-btn {
   padding: 6px 14px;
   border-radius: 8px;
   border: 1px solid var(--border-subtle);
@@ -73,8 +73,8 @@
   cursor: pointer;
   transition: border-color 0.2s, background 0.2s;
 }
-.nba-api-key-btn:hover { border-color: var(--accent-red); background: rgba(233, 69, 96, 0.08); }
-.nba-refresh-btn {
+.nfl-api-key-btn:hover { border-color: var(--accent-red); background: rgba(233, 69, 96, 0.08); }
+.nfl-refresh-btn {
   display: flex;
   align-items: center;
   gap: 6px;
@@ -87,34 +87,34 @@
   font-size: 0.85rem;
   transition: border-color 0.2s, background 0.2s;
 }
-.nba-refresh-btn:hover { border-color: var(--accent-red); background: var(--bg-card-hover); }
-.nba-refresh-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-.nba-refresh-icon { font-size: 1.1rem; display: inline-block; transition: transform 0.3s; }
-.nba-refresh-icon.spinning { animation: spin 0.8s linear infinite; }
+.nfl-refresh-btn:hover { border-color: var(--accent-red); background: var(--bg-card-hover); }
+.nfl-refresh-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.nfl-refresh-icon { font-size: 1.1rem; display: inline-block; transition: transform 0.3s; }
+.nfl-refresh-icon.spinning { animation: spin 0.8s linear infinite; }
 
 /* API Key panel */
-.nba-api-key-panel {
+.nfl-api-key-panel {
   background: var(--bg-card);
   border: 1px solid var(--border-subtle);
   border-radius: 12px;
   padding: 16px;
   margin-bottom: 16px;
 }
-.nba-api-key-info {
+.nfl-api-key-info {
   font-size: 0.85rem;
   color: var(--text-secondary);
   margin-bottom: 12px;
 }
-.nba-api-key-info a {
+.nfl-api-key-info a {
   color: var(--accent-red);
   text-decoration: underline;
 }
-.nba-api-key-row {
+.nfl-api-key-row {
   display: flex;
   gap: 8px;
   align-items: center;
 }
-.nba-api-key-input {
+.nfl-api-key-input {
   flex: 1;
   padding: 8px 12px;
   border-radius: 8px;
@@ -124,10 +124,10 @@
   font-size: 0.9rem;
   outline: none;
 }
-.nba-api-key-input:focus { border-color: var(--accent-red); }
+.nfl-api-key-input:focus { border-color: var(--accent-red); }
 
 /* Tabs */
-.nba-tabs {
+.nfl-tabs {
   display: flex;
   gap: 4px;
   margin-bottom: 24px;
@@ -136,7 +136,7 @@
   padding: 4px;
   border: 1px solid var(--border-subtle);
 }
-.nba-tab {
+.nfl-tab {
   flex: 1;
   padding: 10px 16px;
   border: none;
@@ -152,12 +152,12 @@
   justify-content: center;
   gap: 8px;
 }
-.nba-tab:hover { color: var(--text-primary); }
-.nba-tab.active {
+.nfl-tab:hover { color: var(--text-primary); }
+.nfl-tab.active {
   background: rgba(233, 69, 96, 0.15);
   color: var(--accent-red);
 }
-.nba-live-badge {
+.nfl-live-badge {
   font-size: 0.65rem;
   padding: 2px 6px;
   border-radius: 4px;
@@ -169,8 +169,8 @@
 }
 
 /* ======== Scoreboard ======== */
-.nba-section { margin-bottom: 32px; }
-.nba-section-title {
+.nfl-section { margin-bottom: 32px; }
+.nfl-section-title {
   font-size: 1.1rem;
   font-weight: 700;
   margin-bottom: 12px;
@@ -179,30 +179,30 @@
   gap: 8px;
   color: var(--text-primary);
 }
-.nba-games-grid {
+.nfl-games-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 12px;
 }
 
 /* Game card */
-.nba-game-card {
+.nfl-game-card {
   border-radius: 14px;
   background: var(--bg-card);
   border: 1px solid var(--border-subtle);
   overflow: hidden;
   transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
 }
-.nba-game-card:hover {
+.nfl-game-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 24px rgba(0,0,0,0.2);
 }
-.nba-game-card.is-live {
+.nfl-game-card.is-live {
   border-color: rgba(34, 197, 94, 0.4);
   box-shadow: 0 0 20px rgba(34, 197, 94, 0.08);
 }
-.nba-game-card.is-final { opacity: 0.8; }
-.nba-game-live-bar {
+.nfl-game-card.is-final { opacity: 0.8; }
+.nfl-game-live-bar {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -213,39 +213,39 @@
   font-weight: 700;
   letter-spacing: 0.03em;
 }
-.nba-game-status-bar {
+.nfl-game-status-bar {
   padding: 8px 14px;
   color: var(--text-secondary);
   font-size: 0.8rem;
   font-weight: 600;
 }
-.nba-game-teams { padding: 12px 14px; }
-.nba-game-team {
+.nfl-game-teams { padding: 12px 14px; }
+.nfl-game-team {
   display: flex;
   align-items: center;
   gap: 10px;
   padding: 6px 0;
 }
-.nba-team-logo {
+.nfl-team-logo {
   width: 28px;
   height: 28px;
   object-fit: contain;
   flex-shrink: 0;
 }
-.nba-team-info { flex: 1; display: flex; align-items: baseline; gap: 8px; }
-.nba-team-name { font-weight: 700; font-size: 0.95rem; }
-.nba-team-record { font-size: 0.75rem; color: var(--text-muted); }
-.nba-team-score { font-size: 1.3rem; font-weight: 800; min-width: 36px; text-align: right; }
+.nfl-team-info { flex: 1; display: flex; align-items: baseline; gap: 8px; }
+.nfl-team-name { font-weight: 700; font-size: 0.95rem; }
+.nfl-team-record { font-size: 0.75rem; color: var(--text-muted); }
+.nfl-team-score { font-size: 1.3rem; font-weight: 800; min-width: 36px; text-align: right; }
 
 /* Game card odds bar */
-.nba-game-odds-bar {
+.nfl-game-odds-bar {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
   padding: 8px 14px 12px;
   border-top: 1px solid var(--border-subtle);
 }
-.nba-game-odds-chip {
+.nfl-game-odds-chip {
   font-size: 0.7rem;
   padding: 3px 8px;
   border-radius: 6px;
@@ -256,7 +256,7 @@
 }
 
 /* ======== Pulse dot ======== */
-.nba-pulse-dot {
+.nfl-pulse-dot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
@@ -265,7 +265,7 @@
   flex-shrink: 0;
   position: relative;
 }
-.nba-pulse-dot::after {
+.nfl-pulse-dot::after {
   content: '';
   position: absolute;
   inset: -4px;
@@ -279,12 +279,12 @@
 }
 
 /* ======== Loading / Empty ======== */
-.nba-loading, .nba-empty {
+.nfl-loading, .nfl-empty {
   text-align: center;
   padding: 60px 20px;
   color: var(--text-secondary);
 }
-.nba-spinner {
+.nfl-spinner {
   width: 32px;
   height: 32px;
   border: 3px solid var(--border-subtle);
@@ -295,17 +295,17 @@
 }
 
 /* ======== Groups ======== */
-.nba-groups-header {
+.nfl-groups-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 20px;
 }
-.nba-groups-header h2 {
+.nfl-groups-header h2 {
   font-size: 1.3rem;
   font-weight: 700;
 }
-.nba-create-btn {
+.nfl-create-btn {
   padding: 8px 18px;
   border-radius: 8px;
   border: 1px solid var(--accent-red);
@@ -316,24 +316,24 @@
   cursor: pointer;
   transition: background 0.2s;
 }
-.nba-create-btn:hover { background: rgba(233, 69, 96, 0.22); }
+.nfl-create-btn:hover { background: rgba(233, 69, 96, 0.22); }
 
 /* Create group panel */
-.nba-create-group-panel {
+.nfl-create-group-panel {
   background: var(--bg-card);
   border: 1px solid var(--border-subtle);
   border-radius: 14px;
   padding: 20px;
   margin-bottom: 24px;
 }
-.nba-create-group-top {
+.nfl-create-group-top {
   display: flex;
   align-items: center;
   gap: 12px;
   flex-wrap: wrap;
   margin-bottom: 16px;
 }
-.nba-group-name-input {
+.nfl-group-name-input {
   flex: 1;
   min-width: 180px;
   padding: 10px 14px;
@@ -345,9 +345,9 @@
   outline: none;
   transition: border-color 0.2s;
 }
-.nba-group-name-input:focus { border-color: var(--accent-red); }
-.nba-create-actions { display: flex; gap: 8px; }
-.nba-save-btn {
+.nfl-group-name-input:focus { border-color: var(--accent-red); }
+.nfl-create-actions { display: flex; gap: 8px; }
+.nfl-save-btn {
   padding: 8px 18px;
   border-radius: 8px;
   border: none;
@@ -358,9 +358,9 @@
   cursor: pointer;
   transition: opacity 0.2s;
 }
-.nba-save-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-.nba-save-btn:hover:not(:disabled) { opacity: 0.9; }
-.nba-cancel-btn {
+.nfl-save-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.nfl-save-btn:hover:not(:disabled) { opacity: 0.9; }
+.nfl-cancel-btn {
   padding: 8px 18px;
   border-radius: 8px;
   border: 1px solid var(--border-subtle);
@@ -370,16 +370,16 @@
   cursor: pointer;
   transition: border-color 0.2s;
 }
-.nba-cancel-btn:hover { border-color: var(--text-secondary); }
+.nfl-cancel-btn:hover { border-color: var(--text-secondary); }
 
 /* Selected player chips */
-.nba-selected-players {
+.nfl-selected-players {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
   margin-bottom: 16px;
 }
-.nba-selected-chip {
+.nfl-selected-chip {
   display: flex;
   align-items: center;
   gap: 6px;
@@ -390,13 +390,13 @@
   font-size: 0.8rem;
   color: var(--accent-purple-light);
 }
-.nba-chip-avatar {
+.nfl-chip-avatar {
   width: 22px;
   height: 22px;
   border-radius: 50%;
   object-fit: cover;
 }
-.nba-chip-remove {
+.nfl-chip-remove {
   background: none;
   border: none;
   color: var(--accent-purple-light);
@@ -407,11 +407,11 @@
   opacity: 0.7;
   transition: opacity 0.2s;
 }
-.nba-chip-remove:hover { opacity: 1; }
+.nfl-chip-remove:hover { opacity: 1; }
 
 /* Search */
-.nba-search-panel { margin-top: 8px; }
-.nba-search-input {
+.nfl-search-panel { margin-top: 8px; }
+.nfl-search-input {
   width: 100%;
   padding: 10px 14px;
   border-radius: 8px;
@@ -422,29 +422,29 @@
   outline: none;
   transition: border-color 0.2s;
 }
-.nba-search-input:focus { border-color: var(--accent-purple-light); }
-.nba-search-loading {
+.nfl-search-input:focus { border-color: var(--accent-purple-light); }
+.nfl-search-loading {
   padding: 12px;
   color: var(--text-muted);
   font-size: 0.85rem;
   text-align: center;
 }
-.nba-search-empty {
+.nfl-search-empty {
   padding: 20px;
   color: var(--text-muted);
   font-size: 0.85rem;
   text-align: center;
 }
-.nba-search-results {
+.nfl-search-results {
   margin-top: 8px;
   max-height: 320px;
   overflow-y: auto;
   border-radius: 10px;
   border: 1px solid var(--border-subtle);
 }
-.nba-search-results::-webkit-scrollbar { width: 6px; }
-.nba-search-results::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 3px; }
-.nba-search-result {
+.nfl-search-results::-webkit-scrollbar { width: 6px; }
+.nfl-search-results::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 3px; }
+.nfl-search-result {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -459,17 +459,17 @@
   transition: background 0.15s;
   font-size: 0.9rem;
 }
-.nba-search-result:last-child { border-bottom: none; }
-.nba-search-result:hover:not(:disabled) { background: var(--bg-card-hover); }
-.nba-search-result.added { opacity: 0.5; }
-.nba-result-avatar { flex-shrink: 0; }
-.nba-result-avatar img {
+.nfl-search-result:last-child { border-bottom: none; }
+.nfl-search-result:hover:not(:disabled) { background: var(--bg-card-hover); }
+.nfl-search-result.added { opacity: 0.5; }
+.nfl-result-avatar { flex-shrink: 0; }
+.nfl-result-avatar img {
   width: 36px;
   height: 36px;
   border-radius: 50%;
   object-fit: cover;
 }
-.nba-avatar-placeholder {
+.nfl-avatar-placeholder {
   width: 36px;
   height: 36px;
   border-radius: 50%;
@@ -481,28 +481,28 @@
   font-size: 0.85rem;
   color: var(--accent-red);
 }
-.nba-result-info { flex: 1; min-width: 0; }
-.nba-result-name { font-weight: 600; }
-.nba-result-meta { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
-.nba-result-add {
+.nfl-result-info { flex: 1; min-width: 0; }
+.nfl-result-name { font-weight: 600; }
+.nfl-result-meta { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
+.nfl-result-add {
   color: var(--accent-red);
   font-weight: 600;
   font-size: 0.8rem;
   flex-shrink: 0;
 }
-.nba-result-added {
+.nfl-result-added {
   color: var(--text-muted);
   font-size: 0.8rem;
   flex-shrink: 0;
 }
 
 /* Groups list */
-.nba-groups-list {
+.nfl-groups-list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 12px;
 }
-.nba-group-card {
+.nfl-group-card {
   padding: 18px;
   border-radius: 14px;
   background: var(--bg-card);
@@ -510,19 +510,19 @@
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
 }
-.nba-group-card:hover {
+.nfl-group-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 24px rgba(233, 69, 96, 0.1);
   border-color: rgba(233, 69, 96, 0.25);
 }
-.nba-group-card-top {
+.nfl-group-card-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 12px;
 }
-.nba-group-card-top h3 { font-size: 1rem; font-weight: 700; }
-.nba-group-delete {
+.nfl-group-card-top h3 { font-size: 1rem; font-weight: 700; }
+.nfl-group-delete {
   width: 24px;
   height: 24px;
   border-radius: 6px;
@@ -536,16 +536,16 @@
   justify-content: center;
   transition: background 0.2s, color 0.2s;
 }
-.nba-group-delete:hover { background: rgba(233, 69, 96, 0.2); color: var(--accent-red); }
-.nba-group-players-preview { display: flex; gap: 4px; margin-bottom: 10px; }
-.nba-mini-avatar {
+.nfl-group-delete:hover { background: rgba(233, 69, 96, 0.2); color: var(--accent-red); }
+.nfl-group-players-preview { display: flex; gap: 4px; margin-bottom: 10px; }
+.nfl-mini-avatar {
   width: 28px;
   height: 28px;
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid var(--bg-primary);
 }
-.nba-mini-placeholder {
+.nfl-mini-placeholder {
   width: 28px;
   height: 28px;
   border-radius: 50%;
@@ -558,7 +558,7 @@
   color: var(--accent-red);
   border: 2px solid var(--bg-primary);
 }
-.nba-group-more {
+.nfl-group-more {
   width: 28px;
   height: 28px;
   border-radius: 50%;
@@ -570,13 +570,13 @@
   color: var(--text-muted);
   border: 2px solid var(--bg-primary);
 }
-.nba-group-count {
+.nfl-group-count {
   font-size: 0.8rem;
   color: var(--text-muted);
 }
 
 /* ======== Group Detail ======== */
-.nba-detail-back {
+.nfl-detail-back {
   display: inline-block;
   background: none;
   border: none;
@@ -587,8 +587,8 @@
   margin-bottom: 16px;
   transition: color 0.2s;
 }
-.nba-detail-back:hover { color: var(--accent-red); }
-.nba-detail-title {
+.nfl-detail-back:hover { color: var(--accent-red); }
+.nfl-detail-title {
   font-size: 1.5rem;
   font-weight: 800;
   margin-bottom: 20px;
@@ -597,21 +597,21 @@
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
-.nba-detail-players { display: flex; flex-direction: column; gap: 16px; }
+.nfl-detail-players { display: flex; flex-direction: column; gap: 16px; }
 
 /* Detail card */
-.nba-detail-card {
+.nfl-detail-card {
   border-radius: 14px;
   background: var(--bg-card);
   border: 1px solid var(--border-subtle);
   padding: 20px;
   transition: border-color 0.3s, box-shadow 0.3s;
 }
-.nba-detail-card.is-live {
+.nfl-detail-card.is-live {
   border-color: rgba(34, 197, 94, 0.35);
   box-shadow: 0 0 24px rgba(34, 197, 94, 0.06);
 }
-.nba-detail-card-header {
+.nfl-detail-card-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -619,15 +619,15 @@
   flex-wrap: wrap;
   gap: 12px;
 }
-.nba-detail-player-info { display: flex; align-items: center; gap: 12px; }
-.nba-detail-player-info:hover .nba-props-hint { opacity: 1; }
-.nba-detail-avatar img {
+.nfl-detail-player-info { display: flex; align-items: center; gap: 12px; }
+.nfl-detail-player-info:hover .nfl-props-hint { opacity: 1; }
+.nfl-detail-avatar img {
   width: 48px;
   height: 48px;
   border-radius: 50%;
   object-fit: cover;
 }
-.nba-avatar-placeholder-lg {
+.nfl-avatar-placeholder-lg {
   width: 48px;
   height: 48px;
   border-radius: 50%;
@@ -639,24 +639,24 @@
   font-size: 1.2rem;
   color: var(--accent-red);
 }
-.nba-detail-player-name {
+.nfl-detail-player-name {
   font-weight: 700;
   font-size: 1.05rem;
   display: flex;
   align-items: center;
   gap: 8px;
 }
-.nba-props-hint {
+.nfl-props-hint {
   font-size: 0.7rem;
   color: var(--accent-red);
   opacity: 0;
   transition: opacity 0.2s;
   font-weight: 500;
 }
-.nba-detail-player-meta { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
+.nfl-detail-player-meta { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
 
 /* Live indicator */
-.nba-live-indicator {
+.nfl-live-indicator {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -664,20 +664,20 @@
   border-radius: 8px;
   background: rgba(34, 197, 94, 0.1);
 }
-.nba-live-text {
+.nfl-live-text {
   color: #22c55e;
   font-weight: 700;
   font-size: 0.75rem;
   letter-spacing: 0.05em;
 }
-.nba-live-clock {
+.nfl-live-clock {
   color: #22c55e;
   font-size: 0.8rem;
   font-weight: 600;
 }
 
 /* Score in detail */
-.nba-detail-game-score {
+.nfl-detail-game-score {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -687,37 +687,37 @@
   background: rgba(255,255,255,0.02);
   margin-bottom: 16px;
 }
-.nba-score-team {
+.nfl-score-team {
   display: flex;
   align-items: center;
   gap: 8px;
 }
-.nba-score-logo { width: 24px; height: 24px; object-fit: contain; }
-.nba-score-abbr { font-weight: 600; font-size: 0.9rem; }
-.nba-score-val { font-size: 1.4rem; font-weight: 800; }
-.nba-score-vs { color: var(--text-muted); font-size: 0.8rem; }
+.nfl-score-logo { width: 24px; height: 24px; object-fit: contain; }
+.nfl-score-abbr { font-weight: 600; font-size: 0.9rem; }
+.nfl-score-val { font-size: 1.4rem; font-weight: 800; }
+.nfl-score-vs { color: var(--text-muted); font-size: 0.8rem; }
 
 /* ======== Odds Display ======== */
-.nba-odds-display {
+.nfl-odds-display {
   margin-bottom: 16px;
   padding: 12px;
   border-radius: 10px;
   background: rgba(164, 120, 232, 0.06);
   border: 1px solid rgba(164, 120, 232, 0.15);
 }
-.nba-odds-display h4 {
+.nfl-odds-display h4 {
   font-size: 0.75rem;
   color: var(--accent-purple-light);
   text-transform: uppercase;
   letter-spacing: 0.06em;
   margin-bottom: 8px;
 }
-.nba-odds-grid {
+.nfl-odds-grid {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
 }
-.nba-odds-item {
+.nfl-odds-item {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -727,14 +727,14 @@
   border: 1px solid var(--border-subtle);
   min-width: 70px;
 }
-.nba-odds-label {
+.nfl-odds-label {
   font-size: 0.65rem;
   color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.04em;
   margin-bottom: 3px;
 }
-.nba-odds-value {
+.nfl-odds-value {
   font-size: 0.95rem;
   font-weight: 700;
   color: var(--text-primary);
@@ -742,7 +742,7 @@
   align-items: center;
   gap: 6px;
 }
-.nba-odds-conf {
+.nfl-odds-conf {
   font-size: 0.65rem;
   font-weight: 600;
   color: var(--accent-purple-light);
@@ -750,7 +750,7 @@
   padding: 1px 5px;
   border-radius: 4px;
 }
-.nba-odds-provider {
+.nfl-odds-provider {
   font-size: 0.65rem;
   color: var(--text-muted);
   margin-top: 6px;
@@ -758,19 +758,19 @@
 }
 
 /* Stats grid */
-.nba-detail-stats h4, .nba-detail-next-game h4 {
+.nfl-detail-stats h4, .nfl-detail-next-game h4 {
   font-size: 0.8rem;
   color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.06em;
   margin-bottom: 10px;
 }
-.nba-stats-grid {
+.nfl-stats-grid {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
 }
-.nba-stat-item {
+.nfl-stat-item {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -780,36 +780,36 @@
   border: 1px solid var(--border-subtle);
   min-width: 56px;
 }
-.nba-stat-label {
+.nfl-stat-label {
   font-size: 0.65rem;
   color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.04em;
   margin-bottom: 4px;
 }
-.nba-stat-value {
+.nfl-stat-value {
   font-size: 1rem;
   font-weight: 700;
   color: var(--text-primary);
 }
 
 /* Next game */
-.nba-detail-next-game { margin-top: 12px; }
-.nba-next-matchup {
+.nfl-detail-next-game { margin-top: 12px; }
+.nfl-next-matchup {
   display: flex;
   align-items: center;
   gap: 8px;
   font-size: 0.9rem;
   font-weight: 600;
 }
-.nba-next-at { color: var(--text-muted); font-weight: 400; }
-.nba-next-time {
+.nfl-next-at { color: var(--text-muted); font-weight: 400; }
+.nfl-next-time {
   color: var(--text-secondary);
   font-weight: 400;
   font-size: 0.8rem;
   margin-left: auto;
 }
-.nba-detail-no-game {
+.nfl-detail-no-game {
   color: var(--text-muted);
   font-size: 0.85rem;
   text-align: center;
@@ -817,7 +817,7 @@
 }
 
 /* ======== Player Props Modal ======== */
-.nba-modal-overlay {
+.nfl-modal-overlay {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.7);
@@ -828,7 +828,7 @@
   z-index: 1000;
   padding: 20px;
 }
-.nba-modal {
+.nfl-modal {
   background: var(--bg-primary);
   border: 1px solid var(--border-subtle);
   border-radius: 16px;
@@ -839,28 +839,28 @@
   padding: 24px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
 }
-.nba-modal::-webkit-scrollbar { width: 6px; }
-.nba-modal::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 3px; }
-.nba-modal-header {
+.nfl-modal::-webkit-scrollbar { width: 6px; }
+.nfl-modal::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 3px; }
+.nfl-modal-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 20px;
 }
-.nba-modal-player-info {
+.nfl-modal-player-info {
   display: flex;
   align-items: center;
   gap: 12px;
 }
-.nba-modal-avatar {
+.nfl-modal-avatar {
   width: 48px;
   height: 48px;
   border-radius: 50%;
   object-fit: cover;
 }
-.nba-modal-player-name { font-weight: 700; font-size: 1.1rem; }
-.nba-modal-player-meta { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
-.nba-modal-close {
+.nfl-modal-player-name { font-weight: 700; font-size: 1.1rem; }
+.nfl-modal-player-meta { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
+.nfl-modal-close {
   width: 32px;
   height: 32px;
   border-radius: 8px;
@@ -874,8 +874,8 @@
   justify-content: center;
   transition: background 0.2s, color 0.2s;
 }
-.nba-modal-close:hover { background: rgba(233, 69, 96, 0.15); color: var(--accent-red); }
-.nba-modal-section-title {
+.nfl-modal-close:hover { background: rgba(233, 69, 96, 0.15); color: var(--accent-red); }
+.nfl-modal-section-title {
   font-size: 0.85rem;
   color: var(--text-muted);
   text-transform: uppercase;
@@ -884,34 +884,34 @@
 }
 
 /* Props error */
-.nba-props-error {
+.nfl-props-error {
   text-align: center;
   padding: 24px;
   color: var(--text-secondary);
   font-size: 0.9rem;
 }
-.nba-props-error .nba-save-btn { margin-top: 12px; }
+.nfl-props-error .nfl-save-btn { margin-top: 12px; }
 
 /* Props list */
-.nba-props-list { display: flex; flex-direction: column; gap: 12px; }
-.nba-prop-card {
+.nfl-props-list { display: flex; flex-direction: column; gap: 12px; }
+.nfl-prop-card {
   border-radius: 12px;
   background: var(--bg-card);
   border: 1px solid var(--border-subtle);
   padding: 14px;
 }
-.nba-prop-header {
+.nfl-prop-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 12px;
 }
-.nba-prop-market {
+.nfl-prop-market {
   font-weight: 700;
   font-size: 0.9rem;
   color: var(--text-primary);
 }
-.nba-prop-line {
+.nfl-prop-line {
   font-size: 0.8rem;
   color: var(--accent-purple-light);
   font-weight: 600;
@@ -921,12 +921,12 @@
 }
 
 /* Props odds row */
-.nba-prop-odds-row {
+.nfl-prop-odds-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
 }
-.nba-prop-side {
+.nfl-prop-side {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -937,49 +937,49 @@
   border: 1px solid var(--border-subtle);
   transition: border-color 0.2s;
 }
-.nba-prop-side.favored {
+.nfl-prop-side.favored {
   border-color: rgba(34, 197, 94, 0.3);
   background: rgba(34, 197, 94, 0.04);
 }
-.nba-prop-direction {
+.nfl-prop-direction {
   font-size: 0.7rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: var(--text-muted);
 }
-.nba-prop-odds-value {
+.nfl-prop-odds-value {
   font-size: 1.1rem;
   font-weight: 800;
   color: var(--text-primary);
 }
 
 /* Confidence bar */
-.nba-confidence-bar {
+.nfl-confidence-bar {
   width: 100%;
   height: 6px;
   border-radius: 3px;
   background: rgba(255,255,255,0.06);
   overflow: hidden;
 }
-.nba-confidence-fill {
+.nfl-confidence-fill {
   height: 100%;
   border-radius: 3px;
   transition: width 0.6s ease;
 }
-.nba-confidence-fill.over {
+.nfl-confidence-fill.over {
   background: linear-gradient(90deg, #22c55e, #4ade80);
 }
-.nba-confidence-fill.under {
+.nfl-confidence-fill.under {
   background: linear-gradient(90deg, #e94560, #f97171);
 }
-.nba-confidence-pct {
+.nfl-confidence-pct {
   font-size: 0.85rem;
   font-weight: 700;
 }
-.nba-prop-side.favored .nba-confidence-pct { color: #22c55e; }
+.nfl-prop-side.favored .nfl-confidence-pct { color: #22c55e; }
 
-.nba-prop-bookmaker {
+.nfl-prop-bookmaker {
   font-size: 0.65rem;
   color: var(--text-muted);
   margin-top: 8px;
@@ -987,48 +987,23 @@
 }
 
 /* ======== Loading Skeletons ======== */
-.nba-skeleton-card { animation: skeletonPulse 1.5s ease-in-out infinite; }
-.nba-skeleton-bar { height: 32px; background: rgba(255,255,255,0.04); }
-.nba-skeleton-team {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 6px 0;
-}
-.nba-skeleton-circle {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.06);
-  flex-shrink: 0;
-}
-.nba-skeleton-line {
-  flex: 1;
-  height: 14px;
-  border-radius: 4px;
-  background: rgba(255,255,255,0.06);
-}
-.nba-skeleton-score {
-  width: 36px;
-  height: 20px;
-  border-radius: 4px;
-  background: rgba(255,255,255,0.06);
-}
-@keyframes skeletonPulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
-}
+.nfl-skeleton-card { animation: skeletonPulse 1.5s ease-in-out infinite; }
+.nfl-skeleton-bar { height: 32px; background: rgba(255,255,255,0.04); }
+.nfl-skeleton-team { display: flex; align-items: center; gap: 10px; padding: 6px 0; }
+.nfl-skeleton-circle { width: 28px; height: 28px; border-radius: 50%; background: rgba(255,255,255,0.06); flex-shrink: 0; }
+.nfl-skeleton-line { flex: 1; height: 14px; border-radius: 4px; background: rgba(255,255,255,0.06); }
+.nfl-skeleton-score { width: 36px; height: 20px; border-radius: 4px; background: rgba(255,255,255,0.06); }
 
 /* ======== Responsive ======== */
 @media (max-width: 500px) {
-  .nba-page { padding: 24px 12px 60px; }
-  .nba-games-grid { grid-template-columns: 1fr; }
-  .nba-groups-list { grid-template-columns: 1fr; }
-  .nba-create-group-top { flex-direction: column; }
-  .nba-group-name-input { width: 100%; }
-  .nba-detail-card-header { flex-direction: column; align-items: flex-start; }
-  .nba-detail-game-score { flex-direction: column; gap: 8px; }
-  .nba-refresh-bar { flex-direction: column; align-items: flex-start; }
-  .nba-api-key-row { flex-direction: column; }
-  .nba-modal { padding: 16px; }
+  .nfl-page { padding: 24px 12px 60px; }
+  .nfl-games-grid { grid-template-columns: 1fr; }
+  .nfl-groups-list { grid-template-columns: 1fr; }
+  .nfl-create-group-top { flex-direction: column; }
+  .nfl-group-name-input { width: 100%; }
+  .nfl-detail-card-header { flex-direction: column; align-items: flex-start; }
+  .nfl-detail-game-score { flex-direction: column; gap: 8px; }
+  .nfl-refresh-bar { flex-direction: column; align-items: flex-start; }
+  .nfl-api-key-row { flex-direction: column; }
+  .nfl-modal { padding: 16px; }
 }
