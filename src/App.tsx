@@ -20,6 +20,7 @@ import IOSInstallPrompt from './components/IOSInstallPrompt'
 import InstallPrompt from './components/InstallPrompt'
 import PortalLogin from './pages/PortalLogin'
 import Portal from './pages/Portal'
+import ProtectedRoute from './components/ProtectedRoute'
 import Terminal from './pages/Terminal'
 import EthanFarm from './pages/EthanFarm'
 import Analytics, { trackPageView, trackClick } from './pages/Analytics'
@@ -87,7 +88,7 @@ function AnimatedRoutes() {
         <Route path="/tools/mlb" element={<PageTransition><Suspense fallback={<LazyFallback />}><MLBCommandCenter /></Suspense></PageTransition>} />
         <Route path="/tools/nfl" element={<PageTransition><Suspense fallback={<LazyFallback />}><NFLCommandCenter /></Suspense></PageTransition>} />
         <Route path="/portal/login" element={<PageTransition><PortalLogin /></PageTransition>} />
-        <Route path="/portal" element={<PageTransition><Portal /></PageTransition>} />
+        <Route path="/portal" element={<PageTransition><ProtectedRoute><Portal /></ProtectedRoute></PageTransition>} />
         <Route path="/terminal" element={<PageTransition><Terminal /></PageTransition>} />
         <Route path="/ethan-farm" element={<PageTransition><EthanFarm /></PageTransition>} />
         <Route path="/analytics" element={<PageTransition><Analytics /></PageTransition>} />

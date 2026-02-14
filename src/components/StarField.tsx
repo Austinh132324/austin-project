@@ -23,15 +23,17 @@ export default function StarField({
     if (!ctx) return
 
     let animId: number
-    let stars: { x: number; y: number; r: number; baseAlpha: number; alpha: number; phase: number; color: string }[] = []
+    let stars: { x: number; y: number; r: number; baseAlpha: number; alpha: number; phase: number; color: string; depth: number }[] = []
     const shootingStarList: { x: number; y: number; len: number; speed: number; angle: number; alpha: number; decay: number }[] = []
     let orbList: { x: number; y: number; r: number; dx: number; dy: number; hue: string; alpha: number }[] = []
     const mouse = { x: -1000, y: -1000 }
+    // Smoothed parallax offset (normalized -1 to 1 from center)
+    const parallax = { x: 0, y: 0, targetX: 0, targetY: 0 }
     let t = 0
 
     function resize() {
       canvas!.width = window.innerWidth
-      canvas!.height = Math.max(document.body.scrollHeight, window.innerHeight)
+      canvas!.height = window.innerHeight
       initStars()
       if (nebulaOrbs) initOrbs()
     }
@@ -48,6 +50,7 @@ export default function StarField({
           alpha: 0,
           phase: Math.random() * Math.PI * 2,
           color: Math.random() > 0.85 ? (Math.random() > 0.5 ? '#e94560' : '#a478e8') : '#e0e0e8',
+          depth: 0.3 + Math.random() * 0.7, // 0.3 = far (slow), 1.0 = near (fast)
         })
       }
     }
@@ -79,12 +82,19 @@ export default function StarField({
       })
     }
 
+    // Max parallax shift in pixels for the nearest stars
+    const PARALLAX_STRENGTH = 30
+
     function draw() {
       const c = ctx!
       const w = canvas!.width
       const h = canvas!.height
       c.clearRect(0, 0, w, h)
       t += 0.016
+
+      // Smooth parallax interpolation
+      parallax.x += (parallax.targetX - parallax.x) * 0.05
+      parallax.y += (parallax.targetY - parallax.y) * 0.05
 
       if (nebulaOrbs) {
         for (const orb of orbList) {
@@ -93,40 +103,49 @@ export default function StarField({
           if (orb.x > w + orb.r) orb.x = -orb.r
           if (orb.y < -orb.r) orb.y = h + orb.r
           if (orb.y > h + orb.r) orb.y = -orb.r
-          const g = c.createRadialGradient(orb.x, orb.y, 0, orb.x, orb.y, orb.r)
+          // Orbs shift slightly with parallax (at depth 0.2)
+          const ox = orb.x + parallax.x * PARALLAX_STRENGTH * 0.2
+          const oy = orb.y + parallax.y * PARALLAX_STRENGTH * 0.2
+          const g = c.createRadialGradient(ox, oy, 0, ox, oy, orb.r)
           g.addColorStop(0, `rgba(${orb.hue},${orb.alpha})`)
           g.addColorStop(1, `rgba(${orb.hue},0)`)
           c.fillStyle = g
-          c.fillRect(orb.x - orb.r, orb.y - orb.r, orb.r * 2, orb.r * 2)
+          c.fillRect(ox - orb.r, oy - orb.r, orb.r * 2, orb.r * 2)
         }
       }
 
       for (let i = 0; i < stars.length; i++) {
         const s = stars[i]
+        // Apply parallax offset based on star depth
+        const sx = s.x + parallax.x * PARALLAX_STRENGTH * s.depth
+        const sy = s.y + parallax.y * PARALLAX_STRENGTH * s.depth
+
         s.alpha = s.baseAlpha + Math.sin(t * 2 + s.phase) * 0.2
-        const dx = s.x - mouse.x, dy = s.y - mouse.y
+        const dx = sx - mouse.x, dy = sy - mouse.y
         const dist = Math.sqrt(dx * dx + dy * dy)
         if (dist < 180) {
           const strength = 1 - dist / 180
           s.alpha = Math.min(1, s.alpha + strength * 0.7)
           c.beginPath()
           c.strokeStyle = `rgba(233,69,96,${0.12 * strength})`
-          c.moveTo(s.x, s.y); c.lineTo(mouse.x, mouse.y); c.stroke()
+          c.moveTo(sx, sy); c.lineTo(mouse.x, mouse.y); c.stroke()
         }
         for (let j = i + 1; j < stars.length; j++) {
           const s2 = stars[j]
-          const d = Math.abs(s.x - s2.x) + Math.abs(s.y - s2.y)
+          const s2x = s2.x + parallax.x * PARALLAX_STRENGTH * s2.depth
+          const s2y = s2.y + parallax.y * PARALLAX_STRENGTH * s2.depth
+          const d = Math.abs(sx - s2x) + Math.abs(sy - s2y)
           if (d < 80) {
             c.beginPath()
             c.strokeStyle = `rgba(83,52,131,${0.06 * (1 - d / 80)})`
-            c.moveTo(s.x, s.y); c.lineTo(s2.x, s2.y); c.stroke()
+            c.moveTo(sx, sy); c.lineTo(s2x, s2y); c.stroke()
           }
         }
         if (s.r > 1.5) {
-          c.beginPath(); c.arc(s.x, s.y, s.r * 3, 0, Math.PI * 2)
+          c.beginPath(); c.arc(sx, sy, s.r * 3, 0, Math.PI * 2)
           c.fillStyle = `rgba(233,69,96,${s.alpha * 0.06})`; c.fill()
         }
-        c.beginPath(); c.arc(s.x, s.y, s.r, 0, Math.PI * 2)
+        c.beginPath(); c.arc(sx, sy, s.r, 0, Math.PI * 2)
         if (s.color === '#e94560') c.fillStyle = `rgba(233,69,96,${s.alpha})`
         else if (s.color === '#a478e8') c.fillStyle = `rgba(164,120,232,${s.alpha})`
         else c.fillStyle = `rgba(224,224,232,${s.alpha})`
@@ -168,8 +187,20 @@ export default function StarField({
     }
 
     const onResize = () => resize()
-    const onMouseMove = (e: MouseEvent) => { mouse.x = e.clientX; mouse.y = e.clientY + window.scrollY }
-    const onTouchMove = (e: TouchEvent) => { const touch = e.touches[0]; mouse.x = touch.clientX; mouse.y = touch.clientY + window.scrollY }
+    const onMouseMove = (e: MouseEvent) => {
+      mouse.x = e.clientX
+      mouse.y = e.clientY
+      // Update parallax target: normalized -1 to 1 from screen center
+      parallax.targetX = (e.clientX / window.innerWidth - 0.5) * 2
+      parallax.targetY = (e.clientY / window.innerHeight - 0.5) * 2
+    }
+    const onTouchMove = (e: TouchEvent) => {
+      const touch = e.touches[0]
+      mouse.x = touch.clientX
+      mouse.y = touch.clientY
+      parallax.targetX = (touch.clientX / window.innerWidth - 0.5) * 2
+      parallax.targetY = (touch.clientY / window.innerHeight - 0.5) * 2
+    }
     window.addEventListener('resize', onResize)
     window.addEventListener('mousemove', onMouseMove)
     window.addEventListener('touchmove', onTouchMove)

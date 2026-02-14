@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import StarField from '../components/StarField'
 import Navbar from '../components/Navbar'
 import SEO from '../components/SEO'
-import { isAuthenticated, logout, getSessionEmail, getSessionRole, hasPermission, type UserRole } from '../lib/utils/auth'
+import { useAuth } from '../lib/utils/AuthContext'
+import { hasPermission, type UserRole } from '../lib/utils/auth'
 import '../styles/Portal.css'
 
 interface QuickLink {
@@ -52,8 +53,7 @@ const manageSections: ManageSection[] = [
 
 export default function Portal() {
   const navigate = useNavigate()
-  const [email, setEmail] = useState<string | null>(null)
-  const [role, setRole] = useState<UserRole>('viewer')
+  const { email, role, logout } = useAuth()
   const [expandedSection, setExpandedSection] = useState<string | null>(null)
 
   // Content management state
@@ -66,15 +66,6 @@ export default function Portal() {
   const [notifSettings, setNotifSettings] = useState(() => {
     try { return JSON.parse(localStorage.getItem('portal-notifs') || '{}') } catch { return {} }
   })
-
-  useEffect(() => {
-    if (!isAuthenticated()) {
-      navigate('/portal/login', { replace: true })
-      return
-    }
-    setEmail(getSessionEmail())
-    setRole(getSessionRole())
-  }, [navigate])
 
   const handleLogout = () => {
     logout()
@@ -112,8 +103,6 @@ export default function Portal() {
     setNotifSettings(updated)
     localStorage.setItem('portal-notifs', JSON.stringify(updated))
   }
-
-  if (!email) return null
 
   return (
     <>
