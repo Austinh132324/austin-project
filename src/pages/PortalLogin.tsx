@@ -1,20 +1,22 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
+import SEO from '../components/SEO'
 import StarField from '../components/StarField'
 import Navbar from '../components/Navbar'
-import { login, isAuthenticated } from '../lib/utils/auth'
+import { useAuth } from '../lib/utils/AuthContext'
 import '../styles/Portal.css'
 
 export default function PortalLogin() {
   const navigate = useNavigate()
+  const { authenticated, login } = useAuth()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    if (isAuthenticated()) navigate('/portal', { replace: true })
-  }, [navigate])
+    if (authenticated) navigate('/portal', { replace: true })
+  }, [authenticated, navigate])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -34,6 +36,7 @@ export default function PortalLogin() {
 
   return (
     <>
+    <SEO title="Portal Login" description="Sign in to the admin portal" />
     <StarField shootingStars nebulaOrbs />
     <Navbar />
     <div className="portal-login-page">

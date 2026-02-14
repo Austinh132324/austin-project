@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { Link } from 'react-router-dom'
+import SEO from '../components/SEO'
 import StarField from '../components/StarField'
 import Navbar from '../components/Navbar'
 import {
@@ -246,6 +247,7 @@ export default function NBACommandCenter() {
 
   return (
     <>
+    <SEO title="NBA Command Center" description="Live NBA scores, odds, player props, and group stats" />
     <StarField shootingStars nebulaOrbs />
     <Navbar />
     <div className="nba-page">
@@ -305,9 +307,16 @@ export default function NBACommandCenter() {
       {activeView === 'scoreboard' && (
         <div className="nba-scoreboard">
           {loading && games.length === 0 && (
-            <div className="nba-loading">
-              <div className="nba-spinner" />
-              <p>Loading games...</p>
+            <div className="nba-games-grid">
+              {[1,2,3,4].map(i => (
+                <div key={i} className="nba-game-card nba-skeleton-card" aria-hidden="true">
+                  <div className="nba-skeleton-bar" />
+                  <div style={{ padding: '12px 14px' }}>
+                    <div className="nba-skeleton-team"><div className="nba-skeleton-circle" /><div className="nba-skeleton-line" /><div className="nba-skeleton-score" /></div>
+                    <div className="nba-skeleton-team"><div className="nba-skeleton-circle" /><div className="nba-skeleton-line" /><div className="nba-skeleton-score" /></div>
+                  </div>
+                </div>
+              ))}
             </div>
           )}
 

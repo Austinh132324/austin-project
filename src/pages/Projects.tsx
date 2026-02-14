@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
+import SEO from '../components/SEO'
 import Navbar from '../components/Navbar'
 import StarField from '../components/StarField'
 import Footer from '../components/Footer'
@@ -144,6 +145,7 @@ export default function Projects() {
 
   return (
     <>
+      <SEO title="Projects" description="Austin Howell's project portfolio" />
       <StarField shootingStars />
       <Navbar />
 

@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { Link } from 'react-router-dom'
+import SEO from '../components/SEO'
 import StarField from '../components/StarField'
 import Navbar from '../components/Navbar'
 import {
@@ -229,6 +230,7 @@ export default function MLBCommandCenter() {
 
   return (
     <>
+    <SEO title="MLB Command Center" description="Live MLB scores, odds, player props, and group stats" />
     <StarField shootingStars nebulaOrbs />
     <Navbar />
     <div className="mlb-page">
@@ -285,9 +287,16 @@ export default function MLBCommandCenter() {
       {activeView === 'scoreboard' && (
         <div className="mlb-scoreboard">
           {loading && games.length === 0 && (
-            <div className="mlb-loading">
-              <div className="mlb-spinner" />
-              <p>Loading games...</p>
+            <div className="mlb-games-grid">
+              {[1,2,3,4].map(i => (
+                <div key={i} className="mlb-game-card mlb-skeleton-card" aria-hidden="true">
+                  <div className="mlb-skeleton-bar" />
+                  <div style={{ padding: '12px 14px' }}>
+                    <div className="mlb-skeleton-team"><div className="mlb-skeleton-circle" /><div className="mlb-skeleton-line" /><div className="mlb-skeleton-score" /></div>
+                    <div className="mlb-skeleton-team"><div className="mlb-skeleton-circle" /><div className="mlb-skeleton-line" /><div className="mlb-skeleton-score" /></div>
+                  </div>
+                </div>
+              ))}
             </div>
           )}
 

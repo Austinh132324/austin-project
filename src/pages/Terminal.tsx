@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
+import SEO from '../components/SEO'
 import { kb } from '../lib/utils/matchResponse'
 import '../styles/Terminal.css'
 
@@ -165,6 +166,7 @@ export default function Terminal() {
 
   return (
     <div className="term-page" onClick={() => inputRef.current?.focus()}>
+      <SEO title="Terminal" description="Interactive CLI terminal" />
       <div className="term-window">
         <div className="term-title-bar">
           <div className="term-dots">

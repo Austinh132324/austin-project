@@ -261,6 +261,17 @@
 .mlb-prop-side.favored .mlb-confidence-pct { color: #22c55e; }
 .mlb-prop-bookmaker { font-size: 0.65rem; color: var(--text-muted); margin-top: 8px; text-align: right; }
 
+/* Loading Skeletons */
+.mlb-skeleton-card { animation: skeletonPulse 1.5s ease-in-out infinite; }
+.mlb-skeleton-bar { height: 32px; background: rgba(255,255,255,0.04); }
+.mlb-skeleton-team {
+  display: flex; align-items: center; gap: 10px; padding: 6px 0;
+}
+.mlb-skeleton-circle { width: 28px; height: 28px; border-radius: 50%; background: rgba(255,255,255,0.06); flex-shrink: 0; }
+.mlb-skeleton-line { flex: 1; height: 14px; border-radius: 4px; background: rgba(255,255,255,0.06); }
+.mlb-skeleton-score { width: 36px; height: 20px; border-radius: 4px; background: rgba(255,255,255,0.06); }
+@keyframes skeletonPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
 /* Responsive */
 @media (max-width: 500px) {
   .mlb-page { padding: 24px 12px 60px; }

@@ -1,45 +1,69 @@
-const CACHE_NAME = 'howell-platform-v1'
-const STATIC_ASSETS = ['/', '/manifest.json']
+const CACHE_NAME = 'austin-cache-v2'
 
-self.addEventListener('install', (event) => {
+const PRECACHE_URLS = [
+  '/',
+  '/index.html',
+  '/manifest.json',
+]
+
+self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(STATIC_ASSETS))
+    caches.open(CACHE_NAME).then(cache => cache.addAll(PRECACHE_URLS))
   )
   self.skipWaiting()
 })
 
-self.addEventListener('activate', (event) => {
+self.addEventListener('activate', event => {
   event.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k)))
+    caches.keys().then(keys =>
+      Promise.all(
+        keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))
+      )
     )
   )
   self.clients.claim()
 })
 
-self.addEventListener('fetch', (event) => {
-  const { request } = event
-  if (request.method !== 'GET') return
+self.addEventListener('fetch', event => {
+  if (event.request.method !== 'GET') return
 
-  // Navigation requests: network first
-  if (request.mode === 'navigate') {
+  // Network-first for API calls, cache fallback
+  if (event.request.url.includes('api.espn.com') || event.request.url.includes('api.the-odds-api.com')) {
     event.respondWith(
-      fetch(request).catch(() => caches.match('/'))
+      fetch(event.request)
+        .then(response => {
+          const clone = response.clone()
+          caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone))
+          return response
+        })
+        .catch(() => caches.match(event.request))
     )
     return
   }
 
-  // Static assets: cache first
-  event.respondWith(
-    caches.match(request).then((cached) => {
-      if (cached) return cached
-      return fetch(request).then((response) => {
-        if (response.ok && response.type === 'basic') {
+  // Cache-first for static assets
+  if (event.request.url.match(/\.(js|css|png|jpg|jpeg|svg|gif|woff2?|ttf|eot|ico)$/)) {
+    event.respondWith(
+      caches.match(event.request).then(cached => {
+        if (cached) return cached
+        return fetch(event.request).then(response => {
           const clone = response.clone()
-          caches.open(CACHE_NAME).then((cache) => cache.put(request, clone))
-        }
+          caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone))
+          return response
+        })
+      })
+    )
+    return
+  }
+
+  // Network-first for navigation, cache fallback
+  event.respondWith(
+    fetch(event.request)
+      .then(response => {
+        const clone = response.clone()
+        caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone))
         return response
       })
-    })
+      .catch(() => caches.match(event.request).then(cached => cached || caches.match('/')))
   )
 })

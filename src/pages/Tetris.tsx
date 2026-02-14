@@ -1,5 +1,6 @@
 import { useRef, useEffect, useState, useCallback } from 'react'
 import { Link } from 'react-router-dom'
+import SEO from '../components/SEO'
 import '../styles/Tetris.css'
 
 const ROWS = 20
@@ -307,6 +308,7 @@ export default function Tetris() {
 
   return (
     <div className="tetris-page">
+      <SEO title="Tetris" description="Play Tetris in the browser" />
       <div className="tetris-top-bar">
         <Link to="/games" className="tetris-back-link">Games</Link>
         <h1>Tetris</h1>

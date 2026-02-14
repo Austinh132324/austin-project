@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef, useCallback } from 'react'
 import { Link } from 'react-router-dom'
+import SEO from '../components/SEO'
 import StarField from '../components/StarField'
 import Footer from '../components/Footer'
 import { matchResponse } from '../lib/utils/matchResponse'
@@ -141,6 +142,7 @@ export default function Home() {
 
   return (
     <>
+      <SEO title="Home" description="Austin Howell - Software Engineer, Creator, Gamer" />
       <StarField shootingStars nebulaOrbs geoShapes />
 
       {/* ===== HERO ===== */}

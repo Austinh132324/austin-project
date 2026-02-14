@@ -43,6 +43,39 @@ body {
 
 a { color: inherit; text-decoration: none; }
 
+/* ---- ACCESSIBILITY ---- */
+/* Skip-to-content link */
+.skip-to-content {
+  position: absolute;
+  top: -100%;
+  left: 0;
+  background: var(--accent-red);
+  color: #fff;
+  padding: 8px 16px;
+  z-index: 10000;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 0 0 8px 0;
+}
+.skip-to-content:focus {
+  top: 0;
+}
+
+/* Focus visible outlines */
+*:focus-visible {
+  outline: 2px solid var(--accent-red);
+  outline-offset: 2px;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 /* ---- SHARED KEYFRAMES ---- */
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(24px); }

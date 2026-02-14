@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import SEO from '../components/SEO'
 import Navbar from '../components/Navbar'
 import StarField from '../components/StarField'
 import '../styles/AboutMe.css'
@@ -116,6 +117,7 @@ export default function AboutMe() {
 
   return (
     <div className="about-page">
+      <SEO title="About Me" description="Background and experience of Austin Howell" />
       <Navbar
         links={[
           { label: 'Skills', href: '#skills' },

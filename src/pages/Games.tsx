@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import SEO from '../components/SEO'
 import StarField from '../components/StarField'
 import Navbar from '../components/Navbar'
 import '../styles/Games.css'
@@ -13,6 +14,7 @@ const games = [
 export default function Games() {
   return (
     <>
+      <SEO title="Games" description="Browser-based games" />
       <StarField shootingStars nebulaOrbs />
       <Navbar />
 
