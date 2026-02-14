@@ -191,6 +191,24 @@
   line-height: 1;
 }
 
+/* Data source indicator */
+.pbi-data-source {
+  padding: 3px 10px;
+  border-radius: 4px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.pbi-source-cloud {
+  background: rgba(18, 181, 203, 0.12);
+  color: #12B5CB;
+}
+.pbi-source-local {
+  background: rgba(242, 200, 15, 0.1);
+  color: #F2C80F;
+}
+
 /* Scrollable content area */
 .pbi-content {
   flex: 1;

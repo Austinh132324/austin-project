@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import StarField from '../components/StarField'
 import SEO from '../components/SEO'
+import { getSupabase, isSupabaseConfigured } from '../lib/utils/supabase'
 import '../styles/Analytics.css'
 
 /* ─── Visitor ID ─── */
@@ -59,24 +60,82 @@ interface AnalyticsEvent {
   browser?: string
 }
 
-function getEvents(): AnalyticsEvent[] {
+/* Local storage helpers (fallback when Supabase is not configured) */
+function getLocalEvents(): AnalyticsEvent[] {
   try {
     return JSON.parse(localStorage.getItem('analytics-events') || '[]')
   } catch { return [] }
 }
 
+function saveLocalEvent(event: AnalyticsEvent) {
+  const events = getLocalEvents()
+  events.push(event)
+  if (events.length > 5000) events.splice(0, events.length - 5000)
+  localStorage.setItem('analytics-events', JSON.stringify(events))
+}
+
+/* Supabase helpers */
+async function fetchSupabaseEvents(): Promise<AnalyticsEvent[]> {
+  const sb = getSupabase()
+  if (!sb) return []
+  const { data, error } = await sb
+    .from('analytics_events')
+    .select('*')
+    .order('timestamp', { ascending: true })
+    .limit(5000)
+  if (error) { console.error('Supabase fetch error:', error.message); return [] }
+  return (data || []).map(row => ({
+    type: row.type,
+    page: row.page,
+    timestamp: row.timestamp,
+    label: row.label ?? undefined,
+    visitorId: row.visitor_id ?? undefined,
+    ip: row.ip ?? undefined,
+    device: row.device ?? undefined,
+    browser: row.browser ?? undefined,
+  }))
+}
+
+function insertSupabaseEvent(event: AnalyticsEvent) {
+  const sb = getSupabase()
+  if (!sb) return
+  sb.from('analytics_events').insert({
+    type: event.type,
+    page: event.page,
+    timestamp: event.timestamp,
+    label: event.label || null,
+    visitor_id: event.visitorId || null,
+    ip: event.ip || null,
+    device: event.device || null,
+    browser: event.browser || null,
+  }).then(({ error }) => {
+    if (error) console.error('Supabase insert error:', error.message)
+  })
+}
+
+/* Unified event writer */
 function addEvent(type: string, page: string, label?: string) {
   const ua = typeof navigator !== 'undefined' ? navigator.userAgent : ''
-  const events = getEvents()
-  events.push({
+  const event: AnalyticsEvent = {
     type, page, timestamp: Date.now(), label,
     visitorId: getVisitorId(),
     ip: cachedIp,
     device: parseDevice(ua),
     browser: parseBrowser(ua),
-  })
-  if (events.length > 5000) events.splice(0, events.length - 5000)
-  localStorage.setItem('analytics-events', JSON.stringify(events))
+  }
+  // Always write to localStorage as immediate cache
+  saveLocalEvent(event)
+  // Also persist to Supabase (fire-and-forget)
+  insertSupabaseEvent(event)
+}
+
+/* Unified event reader */
+async function loadAllEvents(): Promise<AnalyticsEvent[]> {
+  if (isSupabaseConfigured()) {
+    const remote = await fetchSupabaseEvents()
+    if (remote.length > 0) return remote
+  }
+  return getLocalEvents()
 }
 
 function getPageCounts(events: AnalyticsEvent[]): Record<string, number> {
@@ -219,22 +278,34 @@ const NAV_ITEMS: { id: NavSection; label: string; icon: string }[] = [
 ]
 
 export default function Analytics() {
-  const [events, setEvents] = useState<AnalyticsEvent[]>(getEvents)
+  const [events, setEvents] = useState<AnalyticsEvent[]>(getLocalEvents)
   const [activeSection, setActiveSection] = useState<NavSection>('overview')
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [lastRefresh, setLastRefresh] = useState(Date.now())
   const [refreshing, setRefreshing] = useState(false)
+  const [dataSource, setDataSource] = useState<'local' | 'supabase'>('local')
   const barCanvasRef = useRef<HTMLCanvasElement>(null)
   const lineCanvasRef = useRef<HTMLCanvasElement>(null)
   const clickCanvasRef = useRef<HTMLCanvasElement>(null)
   const hourCanvasRef = useRef<HTMLCanvasElement>(null)
   const visitorCanvasRef = useRef<HTMLCanvasElement>(null)
 
+  // Load from Supabase on mount (localStorage is the initial quick render)
+  useEffect(() => {
+    loadAllEvents().then(evts => {
+      setEvents(evts)
+      setDataSource(isSupabaseConfigured() && evts.length > 0 ? 'supabase' : 'local')
+    })
+  }, [])
+
   const refreshData = useCallback(() => {
     setRefreshing(true)
-    setEvents(getEvents())
-    setLastRefresh(Date.now())
-    setTimeout(() => setRefreshing(false), 600)
+    loadAllEvents().then(evts => {
+      setEvents(evts)
+      setDataSource(isSupabaseConfigured() && evts.length > 0 ? 'supabase' : 'local')
+      setLastRefresh(Date.now())
+      setTimeout(() => setRefreshing(false), 600)
+    })
   }, [])
 
   const pageCounts = getPageCounts(events)
@@ -467,8 +538,13 @@ export default function Analytics() {
     return () => window.removeEventListener('resize', handler)
   }, [redraw])
 
-  const clearData = () => {
+  const clearData = async () => {
     localStorage.removeItem('analytics-events')
+    // Also clear Supabase if configured
+    const sb = getSupabase()
+    if (sb) {
+      await sb.from('analytics_events').delete().neq('id', 0)
+    }
     setEvents([])
     setLastRefresh(Date.now())
   }
@@ -533,6 +609,9 @@ export default function Analytics() {
               </svg>
               <span className="pbi-refresh-label">Refresh</span>
             </button>
+            <span className={`pbi-data-source ${dataSource === 'supabase' ? 'pbi-source-cloud' : 'pbi-source-local'}`}>
+              {dataSource === 'supabase' ? 'Cloud' : 'Local'}
+            </span>
             <span className="pbi-ribbon-meta">
               Last updated: {new Date(lastRefresh).toLocaleTimeString()}
             </span>
