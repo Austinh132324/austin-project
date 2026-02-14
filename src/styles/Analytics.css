@@ -430,6 +430,32 @@
   .pbi-ribbon-meta { display: none; }
 }
 
+/* ── History period toggle ── */
+.pbi-period-toggle {
+  display: flex;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 6px;
+  padding: 3px;
+}
+.pbi-period-btn {
+  background: transparent;
+  border: none;
+  color: #8B8A9E;
+  font-size: 12px;
+  font-family: 'Segoe UI', sans-serif;
+  padding: 4px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.pbi-period-btn:hover { color: #E1DFDD; background: rgba(255, 255, 255, 0.06); }
+.pbi-period-btn.active {
+  color: #fff;
+  background: rgba(83, 52, 131, 0.5);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+
 /* ── Scrollbar ── */
 .pbi-content::-webkit-scrollbar { width: 5px; }
 .pbi-content::-webkit-scrollbar-track { background: transparent; }
