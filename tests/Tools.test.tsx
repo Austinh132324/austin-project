@@ -16,6 +16,7 @@ describe('Tools', () => {
     expect(screen.getByText('Music Visualizer')).toBeInTheDocument()
     expect(screen.getByText('NBA Command Center')).toBeInTheDocument()
     expect(screen.getByText('MLB Command Center')).toBeInTheDocument()
+    expect(screen.getByText('Portal')).toBeInTheDocument()
   })
 
   it('renders the page title', () => {

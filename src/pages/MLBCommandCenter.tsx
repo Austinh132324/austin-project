@@ -1,5 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { Link } from 'react-router-dom'
+import StarField from '../components/StarField'
+import Navbar from '../components/Navbar'
 import {
   fetchMlbScoreboard,
   searchMlbPlayers,
@@ -226,6 +228,9 @@ export default function MLBCommandCenter() {
   const hasApiKey = !!getOddsApiKey()
 
   return (
+    <>
+    <StarField shootingStars nebulaOrbs />
+    <Navbar />
     <div className="mlb-page">
       <div className="mlb-top-bar">
         <Link to="/tools" className="mlb-back-link">&larr; Tools</Link>
@@ -616,6 +621,7 @@ export default function MLBCommandCenter() {
         </div>
       )}
     </div>
+    </>
   )
 }
 
