@@ -419,15 +419,36 @@
   .pbi-canvas-tall { height: 260px; }
   .pbi-ribbon { padding: 12px 16px; }
   .pbi-refresh-label { display: none; }
+  /* Make tables horizontally scrollable */
+  .pbi-visual { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .pbi-table { min-width: 480px; }
 }
 
 @media (max-width: 500px) {
   .pbi-sidebar { width: 44px; min-width: 44px; }
   .pbi-nav-icon { font-size: 0.9rem; }
-  .pbi-content { padding: 12px 8px 28px; }
-  .pbi-kpi-value { font-size: 1.4rem; }
-  .pbi-ribbon-title { font-size: 0.95rem; }
+  .pbi-content { padding: 12px 6px 28px; }
+  .pbi-kpi-row { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; }
+  .pbi-kpi { padding: 12px 14px; }
+  .pbi-kpi-value { font-size: 1.3rem; }
+  .pbi-kpi-label { font-size: 0.62rem; }
+  .pbi-ribbon { padding: 10px 12px; }
+  .pbi-ribbon-title { font-size: 0.9rem; }
   .pbi-ribbon-meta { display: none; }
+  .pbi-visual { padding: 12px; }
+  .pbi-visual-header { font-size: 0.72rem; margin-bottom: 10px; }
+  .pbi-table th { padding: 6px 8px; font-size: 0.62rem; }
+  .pbi-table td { padding: 5px 8px; font-size: 0.75rem; }
+  .pbi-table-mono { font-size: 0.68rem !important; }
+  .pbi-canvas-tall { height: 220px; }
+  .pbi-visual canvas { height: 180px; }
+  /* Connection status compact */
+  .pbi-status-label { font-size: 0.58rem; }
+  .pbi-connection-status { gap: 4px; padding: 2px 6px; }
+  .pbi-status-dot { width: 8px; height: 8px; }
+  /* Period toggle compact */
+  .pbi-period-toggle { gap: 2px; }
+  .pbi-period-btn { padding: 3px 8px; font-size: 11px; }
 }
 
 /* ── History period toggle ── */
