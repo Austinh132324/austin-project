@@ -1,382 +1,319 @@
-/* ===== Full-screen dashboard layout ===== */
-.analytics-dashboard {
+/* ═══════════════════════════════════════════════
+   Power BI-inspired Analytics Dashboard
+   Dark theme with professional data visualization
+   ═══════════════════════════════════════════════ */
+
+/* ── Dashboard shell ── */
+.pbi-dashboard {
   display: flex;
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
   z-index: 1;
   overflow: hidden;
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
-/* ===== Sidebar ===== */
-.analytics-sidebar {
-  width: 220px;
-  min-width: 220px;
+/* ── Sidebar (Page Navigator) ── */
+.pbi-sidebar {
+  width: 210px;
+  min-width: 210px;
   height: 100vh;
   display: flex;
   flex-direction: column;
-  background: rgba(8, 8, 24, 0.92);
-  border-right: 1px solid rgba(255, 255, 255, 0.06);
-  backdrop-filter: blur(20px);
-  transition: width 0.25s ease, min-width 0.25s ease;
+  background: #1B1A33;
+  border-right: 1px solid rgba(255,255,255,0.06);
+  transition: width 0.2s ease, min-width 0.2s ease;
   z-index: 2;
 }
+.pbi-sidebar.collapsed { width: 56px; min-width: 56px; }
 
-.analytics-sidebar.collapsed {
-  width: 60px;
-  min-width: 60px;
-}
-
-.analytics-sidebar-header {
+.pbi-sidebar-header {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 18px 16px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 16px 14px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
 }
-
-.analytics-sidebar-back {
-  color: #a0a0b8;
+.pbi-sidebar-back {
+  color: #A19F9D;
   text-decoration: none;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   line-height: 1;
-  transition: color 0.2s;
+  transition: color 0.15s;
   flex-shrink: 0;
 }
-.analytics-sidebar-back:hover { color: #e94560; }
+.pbi-sidebar-back:hover { color: #118DFF; }
 
-.analytics-sidebar-title {
-  font-size: 1rem;
-  font-weight: 800;
-  background: linear-gradient(135deg, #e94560, #533483);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+.pbi-sidebar-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #E1DFDD;
   white-space: nowrap;
   overflow: hidden;
+  letter-spacing: -0.01em;
 }
 
-.analytics-sidebar-toggle {
+.pbi-sidebar-toggle {
   margin-left: auto;
   background: none;
   border: none;
-  color: #606080;
-  font-size: 0.85rem;
+  color: #605E5C;
+  font-size: 0.8rem;
   cursor: pointer;
   padding: 4px;
   flex-shrink: 0;
-  transition: color 0.2s;
+  transition: color 0.15s;
 }
-.analytics-sidebar-toggle:hover { color: #e0e0e8; }
+.pbi-sidebar-toggle:hover { color: #E1DFDD; }
 
-/* Sidebar nav */
-.analytics-sidebar-nav {
+/* Nav items */
+.pbi-sidebar-nav {
   flex: 1;
-  padding: 12px 8px;
+  padding: 8px 6px;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 1px;
   overflow-y: auto;
 }
-
-.analytics-nav-item {
+.pbi-nav-item {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 10px 12px;
+  gap: 10px;
+  padding: 9px 12px;
   border: none;
-  border-radius: 8px;
+  border-radius: 4px;
   background: transparent;
-  color: #a0a0b8;
-  font-size: 0.88rem;
+  color: #A19F9D;
+  font-size: 0.82rem;
   font-family: inherit;
   cursor: pointer;
-  transition: all 0.15s;
+  transition: all 0.12s;
   text-align: left;
   white-space: nowrap;
 }
-
-.analytics-nav-item:hover {
-  background: rgba(255, 255, 255, 0.04);
-  color: #e0e0e8;
+.pbi-nav-item:hover { background: rgba(255,255,255,0.04); color: #D2D0CE; }
+.pbi-nav-item.active {
+  background: rgba(17,141,255,0.12);
+  color: #118DFF;
+  font-weight: 600;
 }
+.pbi-nav-icon { font-size: 1rem; width: 22px; text-align: center; flex-shrink: 0; }
+.pbi-nav-label { overflow: hidden; text-overflow: ellipsis; }
+.collapsed .pbi-nav-item { justify-content: center; padding: 9px 6px; }
 
-.analytics-nav-item.active {
-  background: rgba(233, 69, 96, 0.12);
-  color: #e94560;
+/* Footer */
+.pbi-sidebar-footer {
+  padding: 10px 14px;
+  border-top: 1px solid rgba(255,255,255,0.06);
 }
-
-.analytics-nav-icon {
-  font-size: 1.1rem;
-  width: 24px;
-  text-align: center;
-  flex-shrink: 0;
-}
-
-.analytics-nav-label {
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.collapsed .analytics-nav-item {
-  justify-content: center;
-  padding: 10px 8px;
-}
-
-/* Sidebar footer */
-.analytics-sidebar-footer {
-  padding: 12px 16px;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-.analytics-clear {
+.pbi-clear-btn {
   width: 100%;
-  padding: 8px 14px;
-  border-radius: 8px;
-  border: 1px solid rgba(233, 69, 96, 0.3);
+  padding: 7px 12px;
+  border-radius: 4px;
+  border: 1px solid rgba(255,255,255,0.1);
   background: transparent;
-  color: #e94560;
-  font-size: 0.8rem;
+  color: #A19F9D;
+  font-size: 0.75rem;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.15s;
   font-family: inherit;
 }
-.analytics-clear:hover { background: rgba(233, 69, 96, 0.1); }
+.pbi-clear-btn:hover { background: rgba(255,255,255,0.04); color: #E1DFDD; }
 
-/* ===== Main content area ===== */
-.analytics-main {
+/* ── Main content ── */
+.pbi-main {
   flex: 1;
   height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #141324;
+}
+
+/* Ribbon bar */
+.pbi-ribbon {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 28px;
+  background: #1B1A33;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  flex-shrink: 0;
+}
+.pbi-ribbon-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #E1DFDD;
+  letter-spacing: -0.01em;
+}
+.pbi-ribbon-meta {
+  font-size: 0.72rem;
+  color: #605E5C;
+}
+
+/* Scrollable content area */
+.pbi-content {
+  flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 28px 32px 40px;
+  padding: 20px 24px 40px;
 }
 
-.analytics-view {
-  max-width: 1400px;
-  margin: 0 auto;
-}
-
-.analytics-view-title {
-  font-size: 1.6rem;
-  font-weight: 800;
-  color: #e0e0e8;
-  margin-bottom: 24px;
-}
-
-/* ===== Stat cards ===== */
-.analytics-stats {
+/* ── KPI Cards (Power BI style with left accent border) ── */
+.pbi-kpi-row {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 14px;
-  margin-bottom: 24px;
+  gap: 12px;
+  margin-bottom: 20px;
 }
-
-.analytics-stats-row {
-  grid-template-columns: repeat(auto-fit, minmax(160px, 200px));
+.pbi-kpi {
+  background: #1B1A33;
+  border: 1px solid rgba(255,255,255,0.05);
+  border-left: 4px solid var(--kpi-accent, #118DFF);
+  border-radius: 4px;
+  padding: 16px 18px;
+  transition: box-shadow 0.15s;
 }
-
-.analytics-stat-card {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 12px;
-  padding: 18px 20px;
-  text-align: center;
+.pbi-kpi:hover {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
 }
-
-.analytics-stat-val {
-  font-size: 2rem;
-  font-weight: 800;
-  color: #e94560;
+.pbi-kpi-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #E1DFDD;
   line-height: 1.1;
+  letter-spacing: -0.02em;
 }
-
-.analytics-stat-label {
-  font-size: 0.72rem;
-  color: #a0a0b8;
+.pbi-kpi-label {
+  font-size: 0.7rem;
+  color: #A19F9D;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-top: 6px;
+  letter-spacing: 0.5px;
+  margin-top: 4px;
+  font-weight: 600;
 }
 
-/* ===== Chart cards ===== */
-.analytics-overview-grid {
+/* ── Visual cards (chart containers) ── */
+.pbi-grid-2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-bottom: 24px;
+  gap: 12px;
+  margin-bottom: 12px;
 }
 
-.analytics-chart-card {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 12px;
-  padding: 20px;
+.pbi-visual {
+  background: #1B1A33;
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 4px;
+  padding: 16px;
+  margin-bottom: 12px;
 }
+.pbi-visual-full { margin-bottom: 12px; }
 
-.analytics-chart-card h3 {
-  font-size: 0.85rem;
-  color: #a0a0b8;
-  margin-bottom: 14px;
+.pbi-visual-header {
+  font-size: 0.78rem;
   font-weight: 600;
+  color: #A19F9D;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
 }
 
-.analytics-chart-card canvas {
+.pbi-visual canvas {
   width: 100%;
-  height: 240px;
-  border-radius: 8px;
+  height: 220px;
+  border-radius: 2px;
 }
+.pbi-canvas-tall { height: 340px; }
 
-/* Full-width chart for detail views */
-.analytics-chart-full {
-  margin-bottom: 24px;
-}
-
-.analytics-chart-full canvas {
-  height: 360px;
-}
-
-/* ===== Table cards ===== */
-.analytics-table-card {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 12px;
-  padding: 20px;
-  margin-bottom: 24px;
-}
-
-.analytics-table-card h3 {
-  font-size: 0.85rem;
-  color: #a0a0b8;
-  margin-bottom: 14px;
-  font-weight: 600;
-}
-
-.analytics-table {
+/* ── Tables (Power BI matrix style) ── */
+.pbi-table {
   width: 100%;
   border-collapse: collapse;
 }
-
-.analytics-table th {
+.pbi-table th {
   text-align: left;
-  font-size: 0.72rem;
-  color: #606080;
+  font-size: 0.68rem;
+  color: #605E5C;
   text-transform: uppercase;
-  letter-spacing: 0.8px;
+  letter-spacing: 0.5px;
   padding: 8px 12px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  font-weight: 600;
+  border-bottom: 2px solid rgba(255,255,255,0.08);
+  font-weight: 700;
+  background: rgba(255,255,255,0.02);
 }
-
-.analytics-table td {
-  padding: 8px 12px;
-  font-size: 0.85rem;
-  color: #c0c0d0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+.pbi-table td {
+  padding: 7px 12px;
+  font-size: 0.82rem;
+  color: #D2D0CE;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
 }
-
-.analytics-table tr:hover td {
-  background: rgba(255, 255, 255, 0.02);
+.pbi-table tbody tr:hover td {
+  background: rgba(17,141,255,0.06);
 }
-
-.analytics-table-mono {
-  font-family: 'SF Mono', 'Fira Code', monospace;
-  font-size: 0.8rem !important;
+.pbi-table-bold { font-weight: 600; color: #E1DFDD; }
+.pbi-table-mono {
+  font-family: 'Cascadia Code', 'SF Mono', 'Fira Code', monospace;
+  font-size: 0.75rem !important;
   white-space: nowrap;
 }
 
-/* Inline bar for hourly table */
-.analytics-table-bar-wrap {
+/* Inline distribution bar */
+.pbi-bar-cell {
   width: 100%;
-  height: 8px;
-  background: rgba(255, 255, 255, 0.04);
-  border-radius: 4px;
+  height: 6px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 3px;
   overflow: hidden;
 }
-
-.analytics-table-bar {
+.pbi-bar-fill {
   height: 100%;
-  background: linear-gradient(90deg, #4ade80, #22c55e);
-  border-radius: 4px;
+  border-radius: 3px;
   min-width: 2px;
   transition: width 0.3s ease;
 }
 
-/* Event type badges */
-.analytics-event-badge {
+/* Event badges */
+.pbi-badge {
   display: inline-block;
   padding: 2px 8px;
-  border-radius: 4px;
-  font-size: 0.7rem;
+  border-radius: 2px;
+  font-size: 0.65rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.3px;
 }
+.pbi-badge-pageview { background: rgba(17,141,255,0.15); color: #118DFF; }
+.pbi-badge-click { background: rgba(242,200,15,0.12); color: #F2C80F; }
+.pbi-badge-game { background: rgba(164,120,232,0.15); color: #A478E8; }
 
-.analytics-event-pageview {
-  background: rgba(233, 69, 96, 0.15);
-  color: #e94560;
-}
-
-.analytics-event-click {
-  background: rgba(0, 229, 255, 0.12);
-  color: #00e5ff;
-}
-
-.analytics-event-game {
-  background: rgba(164, 120, 232, 0.15);
-  color: #a478e8;
-}
-
-/* ===== Responsive ===== */
+/* ── Responsive ── */
 @media (max-width: 900px) {
-  .analytics-sidebar {
-    width: 60px;
-    min-width: 60px;
-  }
-  .analytics-sidebar-title,
-  .analytics-nav-label,
-  .analytics-sidebar-footer { display: none; }
-  .analytics-nav-item { justify-content: center; padding: 10px 8px; }
-  .analytics-sidebar-toggle { display: none; }
-
-  .analytics-main {
-    padding: 20px 16px 40px;
-  }
-
-  .analytics-overview-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .analytics-chart-full canvas {
-    height: 260px;
-  }
+  .pbi-sidebar { width: 56px; min-width: 56px; }
+  .pbi-sidebar-title,
+  .pbi-nav-label,
+  .pbi-sidebar-footer { display: none; }
+  .pbi-nav-item { justify-content: center; padding: 9px 6px; }
+  .pbi-sidebar-toggle { display: none; }
+  .pbi-content { padding: 16px 14px 32px; }
+  .pbi-grid-2 { grid-template-columns: 1fr; }
+  .pbi-canvas-tall { height: 260px; }
+  .pbi-ribbon { padding: 12px 16px; }
 }
 
 @media (max-width: 500px) {
-  .analytics-sidebar {
-    width: 48px;
-    min-width: 48px;
-  }
-  .analytics-nav-icon { font-size: 0.95rem; }
-  .analytics-main { padding: 16px 10px 32px; }
-  .analytics-stat-val { font-size: 1.5rem; }
-  .analytics-view-title { font-size: 1.2rem; }
+  .pbi-sidebar { width: 44px; min-width: 44px; }
+  .pbi-nav-icon { font-size: 0.9rem; }
+  .pbi-content { padding: 12px 8px 28px; }
+  .pbi-kpi-value { font-size: 1.4rem; }
+  .pbi-ribbon-title { font-size: 0.95rem; }
 }
 
-/* Scrollbar for main area */
-.analytics-main::-webkit-scrollbar {
-  width: 6px;
-}
-.analytics-main::-webkit-scrollbar-track {
-  background: transparent;
-}
-.analytics-main::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 3px;
-}
-.analytics-main::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.15);
-}
+/* ── Scrollbar ── */
+.pbi-content::-webkit-scrollbar { width: 5px; }
+.pbi-content::-webkit-scrollbar-track { background: transparent; }
+.pbi-content::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.06); border-radius: 3px; }
+.pbi-content::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.12); }
