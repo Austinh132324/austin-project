@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import SEO from '../components/SEO'
 import { kb } from '../lib/utils/matchResponse'
 import '../styles/Terminal.css'
@@ -7,6 +7,7 @@ import '../styles/Terminal.css'
 const PAGES: Record<string, string> = {
   home: '/', aboutme: '/aboutme', projects: '/projects',
   games: '/games', tools: '/tools', terminal: '/terminal',
+  portal: '/portal/login', analytics: '/analytics',
 }
 
 const NEOFETCH = `
@@ -167,6 +168,7 @@ export default function Terminal() {
   return (
     <div className="term-page" onClick={() => inputRef.current?.focus()}>
       <SEO title="Terminal" description="Interactive CLI terminal" />
+      <Link to="/" className="term-back-link" onClick={e => e.stopPropagation()}>&larr; Home</Link>
       <div className="term-window">
         <div className="term-title-bar">
           <div className="term-dots">
