@@ -17,6 +17,8 @@ import MusicVisualizer from './pages/MusicVisualizer'
 import NBACommandCenter from './pages/NBACommandCenter'
 import MLBCommandCenter from './pages/MLBCommandCenter'
 import IOSInstallPrompt from './components/IOSInstallPrompt'
+import PortalLogin from './pages/PortalLogin'
+import Portal from './pages/Portal'
 import Terminal from './pages/Terminal'
 import EthanFarm from './pages/EthanFarm'
 import Analytics, { trackPageView } from './pages/Analytics'
@@ -51,6 +53,8 @@ export default function App() {
         <Route path="/tools/visualizer" element={<MusicVisualizer />} />
         <Route path="/tools/nba" element={<NBACommandCenter />} />
         <Route path="/tools/mlb" element={<MLBCommandCenter />} />
+        <Route path="/portal/login" element={<PortalLogin />} />
+        <Route path="/portal" element={<Portal />} />
         <Route path="/terminal" element={<Terminal />} />
         <Route path="/ethan-farm" element={<EthanFarm />} />
         <Route path="/analytics" element={<Analytics />} />
