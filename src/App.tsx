@@ -16,6 +16,7 @@ import ColorPalette from './pages/ColorPalette'
 import MusicVisualizer from './pages/MusicVisualizer'
 import NBACommandCenter from './pages/NBACommandCenter'
 import MLBCommandCenter from './pages/MLBCommandCenter'
+import IOSInstallPrompt from './components/IOSInstallPrompt'
 import Terminal from './pages/Terminal'
 import EthanFarm from './pages/EthanFarm'
 import Analytics, { trackPageView } from './pages/Analytics'
@@ -32,6 +33,7 @@ export default function App() {
   return (
     <HashRouter>
       <PageTracker />
+      <IOSInstallPrompt />
       <Ethan />
       <Routes>
         <Route path="/" element={<Home />} />

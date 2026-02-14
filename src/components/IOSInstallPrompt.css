@@ -1,0 +1,97 @@
+/* iOS Install Prompt */
+.ios-prompt-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 9999;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 20px;
+  animation: iosOverlayIn 0.3s ease;
+}
+
+@keyframes iosOverlayIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.ios-prompt {
+  background: var(--bg-primary, #0b0b1a);
+  border: 1px solid var(--border-subtle, rgba(255,255,255,0.08));
+  border-radius: 20px;
+  padding: 28px 24px 24px;
+  width: 100%;
+  max-width: 360px;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.4);
+  animation: iosSlideUp 0.4s ease;
+}
+
+@keyframes iosSlideUp {
+  from { transform: translateY(100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.ios-prompt-close {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255,255,255,0.06);
+  color: var(--text-muted, #888);
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+.ios-prompt-close:hover { background: rgba(255,255,255,0.12); }
+
+.ios-prompt-icon {
+  font-size: 2.2rem;
+  margin-bottom: 12px;
+}
+
+.ios-prompt-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: var(--text-primary, #fff);
+}
+
+.ios-prompt-text {
+  font-size: 0.9rem;
+  color: var(--text-secondary, #aaa);
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.ios-prompt-share {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  color: #007aff;
+  margin: 0 2px;
+}
+
+.ios-prompt-dismiss {
+  width: 100%;
+  padding: 12px;
+  border-radius: 12px;
+  border: none;
+  background: var(--accent-red, #e94560);
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.ios-prompt-dismiss:hover { opacity: 0.9; }
