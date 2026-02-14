@@ -102,12 +102,16 @@ const messingQuips = [
 interface EthanResponse {
   text: string
   navigateTo?: string
+  action?: 'leave'
 }
 
 function getEthanResponse(input: string): EthanResponse {
   const lower = input.toLowerCase().trim()
 
   if (lower === '' ) return { text: "Cat got your tongue?" }
+  if (/can you leave|go away|get out|leave me alone|get off|get lost|please leave|shoo|scram|buzz off/.test(lower)) {
+    return { text: "Fine! I know when I'm not wanted... 😢 *walks away dramatically*", action: 'leave' }
+  }
   if (/where.*(home|house|live|farm)/.test(lower) || (/home|farm/.test(lower) && /where|go|show|take|visit/.test(lower))) {
     return { text: "My home? Come on, I'll show you my farm! 🏡", navigateTo: '/ethan-farm' }
   }
@@ -415,6 +419,13 @@ export default function Ethan() {
       if (response.navigateTo) {
         setTimeout(() => navigate(response.navigateTo!), 1200)
       }
+      if (response.action === 'leave') {
+        setTimeout(() => {
+          setChatOpen(false)
+          setMinimized(true)
+          setBubble(null)
+        }, 1500)
+      }
     }, 300 + Math.random() * 500)
   }
 
@@ -476,7 +487,6 @@ export default function Ethan() {
               onKeyDown={handleKeyDown}
               placeholder="Say something..."
               className="ethan-chat-input"
-              autoFocus
             />
             <button className="ethan-chat-send" onClick={handleSend}>Send</button>
           </div>
