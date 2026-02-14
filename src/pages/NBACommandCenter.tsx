@@ -1,5 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { Link } from 'react-router-dom'
+import StarField from '../components/StarField'
+import Navbar from '../components/Navbar'
 import {
   fetchScoreboard,
   searchPlayers,
@@ -243,6 +245,9 @@ export default function NBACommandCenter() {
   const hasApiKey = !!getOddsApiKey()
 
   return (
+    <>
+    <StarField shootingStars nebulaOrbs />
+    <Navbar />
     <div className="nba-page">
       <div className="nba-top-bar">
         <Link to="/tools" className="nba-back-link">&larr; Tools</Link>
@@ -643,6 +648,7 @@ export default function NBACommandCenter() {
         </div>
       )}
     </div>
+    </>
   )
 }
 

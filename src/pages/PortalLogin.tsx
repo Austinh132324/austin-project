@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
+import StarField from '../components/StarField'
+import Navbar from '../components/Navbar'
 import { login, isAuthenticated } from '../lib/utils/auth'
 import '../styles/Portal.css'
 
@@ -31,6 +33,9 @@ export default function PortalLogin() {
   }
 
   return (
+    <>
+    <StarField shootingStars nebulaOrbs />
+    <Navbar />
     <div className="portal-login-page">
       <div className="portal-login-bg">
         <div className="portal-login-orb portal-login-orb-1" />
@@ -94,5 +99,6 @@ export default function PortalLogin() {
         </form>
       </div>
     </div>
+    </>
   )
 }
