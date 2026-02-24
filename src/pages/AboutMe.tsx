@@ -89,13 +89,6 @@ const coursework = [
   'Computer Networks',
 ]
 
-/* ── activities ── */
-const activities = [
-  { title: 'ACM Member', desc: 'Active member of the Association for Computing Machinery.' },
-  { title: 'HackAR 2024', desc: 'Participated in the annual Arkansas hackathon event.' },
-  { title: 'Code.org Volunteer', desc: 'Volunteered to teach coding fundamentals to students.' },
-]
-
 /* ── helper: position nodes on a circle ── */
 function circlePos(index: number, total: number, radius: number) {
   const angle = (2 * Math.PI * index) / total - Math.PI / 2
@@ -275,20 +268,6 @@ export default function AboutMe() {
               <span key={c} className="coursework-chip">{c}</span>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* ── Activities ── */}
-      <section className="about-section">
-        <h2 className="about-section-title scroll-reveal">Activities</h2>
-
-        <div className="activities-grid">
-          {activities.map((a) => (
-            <div key={a.title} className="act-card scroll-reveal">
-              <h3>{a.title}</h3>
-              <p>{a.desc}</p>
-            </div>
-          ))}
         </div>
       </section>
 
