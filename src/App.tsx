@@ -16,6 +16,7 @@ import Pomodoro from './pages/Pomodoro'
 import MarkdownPreview from './pages/MarkdownPreview'
 import ColorPalette from './pages/ColorPalette'
 import MusicVisualizer from './pages/MusicVisualizer'
+import Traitors from './pages/Traitors'
 import IOSInstallPrompt from './components/IOSInstallPrompt'
 import InstallPrompt from './components/InstallPrompt'
 import PortalLogin from './pages/PortalLogin'
@@ -87,6 +88,7 @@ function AnimatedRoutes() {
         <Route path="/tools/markdown" element={<PageTransition><MarkdownPreview /></PageTransition>} />
         <Route path="/tools/colors" element={<PageTransition><ColorPalette /></PageTransition>} />
         <Route path="/tools/visualizer" element={<PageTransition><MusicVisualizer /></PageTransition>} />
+        <Route path="/tools/traitors" element={<PageTransition><Traitors /></PageTransition>} />
         <Route path="/tools/nba" element={<PageTransition><Suspense fallback={<LazyFallback />}><NBACommandCenter /></Suspense></PageTransition>} />
         <Route path="/tools/mlb" element={<PageTransition><Suspense fallback={<LazyFallback />}><MLBCommandCenter /></Suspense></PageTransition>} />
         <Route path="/tools/nfl" element={<PageTransition><Suspense fallback={<LazyFallback />}><NFLCommandCenter /></Suspense></PageTransition>} />

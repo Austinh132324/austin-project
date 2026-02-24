@@ -12,6 +12,7 @@ const tools = [
   { to: '/tools/nba', icon: '\uD83C\uDFC0', title: 'NBA Command Center', desc: 'Live scores, odds, player props, and group stats', color: '#f59e0b' },
   { to: '/tools/mlb', icon: '\u26BE', title: 'MLB Command Center', desc: 'Live scores, odds, player props, and group stats', color: '#2563eb' },
   { to: '/tools/nfl', icon: '\uD83C\uDFC8', title: 'NFL Command Center', desc: 'Live scores, odds, player props, and group stats', color: '#4ade80' },
+  { to: '/tools/traitors', icon: '🕯️', title: 'The Traitors', desc: 'Themed round table countdowns for The Traitors game night', color: '#c9a84c' },
   { to: '/portal/login', icon: '\uD83D\uDD12', title: 'Portal', desc: 'Admin login and site management', color: '#f472b6' },
 ]
 
