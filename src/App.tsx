@@ -2,7 +2,8 @@ import { HashRouter, Routes, Route, useLocation } from 'react-router-dom'
 import { useEffect, lazy, Suspense } from 'react'
 import { AnimatePresence } from 'framer-motion'
 import PageTransition from './components/PageTransition'
-import Ethan from './components/Ethan'
+// TODO: Re-enable Ethan once he's ready to come back
+// import Ethan from './components/Ethan'
 import Home from './pages/Home'
 import AboutMe from './pages/AboutMe'
 import Projects from './pages/Projects'
@@ -109,7 +110,8 @@ export default function App() {
       <ClickTracker />
       <IOSInstallPrompt />
       <InstallPrompt />
-      <Ethan />
+      {/* TODO: Re-enable Ethan once he's ready to come back */}
+      {/* <Ethan /> */}
       <AnimatedRoutes />
     </HashRouter>
   )
