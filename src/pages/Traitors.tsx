@@ -81,6 +81,9 @@ type TimerState = {
   customMin: string
 }
 
+const TIMERS_STORAGE_KEY = 'traitors-timers-v1'
+const SOUND_STORAGE_KEY = 'traitors-sound-v1'
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const AudioCtx = window.AudioContext || (window as any).webkitAudioContext
 
@@ -137,16 +140,88 @@ function fmt(timeLeft: number) {
   return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`
 }
 
-export default function Traitors() {
-  const [timers, setTimers] = useState<Record<string, TimerState>>(() => {
-    const initial: Record<string, TimerState> = {}
-    PHASES.forEach(p => {
-      initial[p.id] = { timeLeft: p.defaultTime, total: p.defaultTime, running: false, done: false, customMin: '' }
-    })
-    return initial
+function getDefaultTimers(): Record<string, TimerState> {
+  const initial: Record<string, TimerState> = {}
+  PHASES.forEach((p) => {
+    initial[p.id] = { timeLeft: p.defaultTime, total: p.defaultTime, running: false, done: false, customMin: '' }
   })
+  return initial
+}
+
+function getInitialTimers(): Record<string, TimerState> {
+  const defaults = getDefaultTimers()
+  try {
+    const raw = localStorage.getItem(TIMERS_STORAGE_KEY)
+    if (!raw) return defaults
+    const parsed = JSON.parse(raw) as Record<string, Partial<TimerState>>
+
+    PHASES.forEach((phase) => {
+      const next = parsed[phase.id]
+      if (!next) return
+
+      const total = typeof next.total === 'number' && Number.isFinite(next.total) && next.total > 0
+        ? Math.round(next.total)
+        : defaults[phase.id].total
+      const nextTime = typeof next.timeLeft === 'number' && Number.isFinite(next.timeLeft)
+        ? Math.round(next.timeLeft)
+        : total
+      const timeLeft = Math.max(0, Math.min(total, nextTime))
+
+      defaults[phase.id] = {
+        timeLeft,
+        total,
+        running: false,
+        done: timeLeft === 0,
+        customMin: typeof next.customMin === 'string' ? next.customMin : '',
+      }
+    })
+  } catch {
+    return defaults
+  }
+
+  return defaults
+}
+
+function getInitialSound(): boolean {
+  try {
+    const raw = localStorage.getItem(SOUND_STORAGE_KEY)
+    if (raw === null) return true
+    return raw === 'true'
+  } catch {
+    return true
+  }
+}
+
+export default function Traitors() {
+  const [timers, setTimers] = useState<Record<string, TimerState>>(getInitialTimers)
+  const [soundEnabled, setSoundEnabled] = useState<boolean>(getInitialSound)
   const [focusedId, setFocusedId] = useState<string | null>(null)
   const intervalRefs = useRef<Record<string, ReturnType<typeof setInterval>>>({})
+  const soundEnabledRef = useRef(soundEnabled)
+
+  useEffect(() => {
+    soundEnabledRef.current = soundEnabled
+  }, [soundEnabled])
+
+  useEffect(() => {
+    try {
+      const pausedTimers: Record<string, TimerState> = {}
+      Object.keys(timers).forEach((id) => {
+        pausedTimers[id] = { ...timers[id], running: false }
+      })
+      localStorage.setItem(TIMERS_STORAGE_KEY, JSON.stringify(pausedTimers))
+    } catch {
+      // Ignore persistence errors.
+    }
+  }, [timers])
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(SOUND_STORAGE_KEY, String(soundEnabled))
+    } catch {
+      // Ignore persistence errors.
+    }
+  }, [soundEnabled])
 
   // Cursor auto-hide after 3s of inactivity
   useEffect(() => {
@@ -170,48 +245,61 @@ export default function Traitors() {
     return () => { document.body.style.overflow = '' }
   }, [focusedId])
 
+  const clearTimerInterval = useCallback((id: string) => {
+    if (intervalRefs.current[id]) {
+      clearInterval(intervalRefs.current[id])
+      delete intervalRefs.current[id]
+    }
+  }, [])
+
+  const startTimerInterval = useCallback((id: string) => {
+    if (intervalRefs.current[id]) return
+    intervalRefs.current[id] = setInterval(() => {
+      setTimers(curr => {
+        const timer = curr[id]
+        if (!timer || !timer.running) return curr
+
+        if (timer.timeLeft <= 1) {
+          clearTimerInterval(id)
+          if (soundEnabledRef.current) playToll()
+          return { ...curr, [id]: { ...timer, timeLeft: 0, running: false, done: true } }
+        }
+
+        if (timer.timeLeft <= 10 && soundEnabledRef.current) playTick()
+        return { ...curr, [id]: { ...timer, timeLeft: timer.timeLeft - 1 } }
+      })
+    }, 1000)
+  }, [clearTimerInterval])
+
   const toggleTimer = useCallback((id: string) => {
     setTimers(prev => {
       const t = prev[id]
       if (t.done || t.timeLeft === 0) return prev
       if (t.running) {
-        if (intervalRefs.current[id]) { clearInterval(intervalRefs.current[id]); delete intervalRefs.current[id] }
+        clearTimerInterval(id)
         return { ...prev, [id]: { ...t, running: false } }
       } else {
-        if (!intervalRefs.current[id]) {
-          intervalRefs.current[id] = setInterval(() => {
-            setTimers(curr => {
-              const timer = curr[id]
-              if (timer.timeLeft <= 1) {
-                if (intervalRefs.current[id]) { clearInterval(intervalRefs.current[id]); delete intervalRefs.current[id] }
-                playToll()
-                return { ...curr, [id]: { ...timer, timeLeft: 0, running: false, done: true } }
-              }
-              if (timer.timeLeft <= 10) playTick()
-              return { ...curr, [id]: { ...timer, timeLeft: timer.timeLeft - 1 } }
-            })
-          }, 1000)
-        }
+        startTimerInterval(id)
         return { ...prev, [id]: { ...t, running: true } }
       }
     })
-  }, [])
+  }, [clearTimerInterval, startTimerInterval])
 
   const resetTimer = useCallback((id: string, newTotal?: number) => {
-    if (intervalRefs.current[id]) { clearInterval(intervalRefs.current[id]); delete intervalRefs.current[id] }
+    clearTimerInterval(id)
     setTimers(prev => {
       const total = newTotal ?? prev[id].total
       return { ...prev, [id]: { ...prev[id], timeLeft: total, total, running: false, done: false } }
     })
-  }, [])
+  }, [clearTimerInterval])
 
   const setPreset = useCallback((id: string, minutes: number) => {
-    if (intervalRefs.current[id]) { clearInterval(intervalRefs.current[id]); delete intervalRefs.current[id] }
+    clearTimerInterval(id)
     setTimers(prev => {
       const total = minutes * 60
       return { ...prev, [id]: { ...prev[id], timeLeft: total, total, running: false, done: false, customMin: '' } }
     })
-  }, [])
+  }, [clearTimerInterval])
 
   const handleCustomChange = useCallback((id: string, value: string) => {
     setTimers(prev => ({ ...prev, [id]: { ...prev[id], customMin: value } }))
@@ -222,10 +310,45 @@ export default function Traitors() {
       const mins = parseFloat(prev[id].customMin)
       if (isNaN(mins) || mins <= 0 || mins > 999) return prev
       const total = Math.round(mins * 60)
-      if (intervalRefs.current[id]) { clearInterval(intervalRefs.current[id]); delete intervalRefs.current[id] }
+      clearTimerInterval(id)
       return { ...prev, [id]: { ...prev[id], timeLeft: total, total, running: false, done: false } }
     })
-  }, [])
+  }, [clearTimerInterval])
+
+  const toggleAllTimers = useCallback(() => {
+    setTimers(prev => {
+      const shouldPause = PHASES.some(phase => prev[phase.id].running)
+      const next: Record<string, TimerState> = { ...prev }
+
+      PHASES.forEach((phase) => {
+        const timer = prev[phase.id]
+        if (shouldPause) {
+          if (timer.running) clearTimerInterval(phase.id)
+          next[phase.id] = { ...timer, running: false }
+          return
+        }
+
+        if (!timer.running && !timer.done && timer.timeLeft > 0) {
+          startTimerInterval(phase.id)
+          next[phase.id] = { ...timer, running: true }
+        }
+      })
+
+      return next
+    })
+  }, [clearTimerInterval, startTimerInterval])
+
+  const resetAllTimers = useCallback(() => {
+    setTimers(prev => {
+      const next: Record<string, TimerState> = { ...prev }
+      PHASES.forEach((phase) => {
+        clearTimerInterval(phase.id)
+        const total = prev[phase.id].total
+        next[phase.id] = { ...prev[phase.id], timeLeft: total, total, running: false, done: false }
+      })
+      return next
+    })
+  }, [clearTimerInterval])
 
   // Keyboard shortcuts in focus mode
   useEffect(() => {
@@ -234,6 +357,7 @@ export default function Traitors() {
       if (e.target instanceof HTMLInputElement) return
       if (e.code === 'Space') { e.preventDefault(); toggleTimer(focusedId) }
       if (e.code === 'KeyR') resetTimer(focusedId)
+      if (e.code === 'KeyM') setSoundEnabled(prev => !prev)
       if (e.code === 'Escape') setFocusedId(null)
     }
     document.addEventListener('keydown', handler)
@@ -244,6 +368,12 @@ export default function Traitors() {
     const refs = intervalRefs.current
     return () => { Object.values(refs).forEach(clearInterval) }
   }, [])
+
+  const hasRunningTimers = PHASES.some(phase => timers[phase.id].running)
+  const hasStartableTimers = PHASES.some((phase) => {
+    const timer = timers[phase.id]
+    return !timer.done && timer.timeLeft > 0
+  })
 
   return (
     <div className="traitors-page">
@@ -301,7 +431,7 @@ export default function Traitors() {
             </div>
 
             <div className="traitors-focus-hints">
-              Space · Start/Pause &nbsp;·&nbsp; R · Reset &nbsp;·&nbsp; Esc · Close
+              Space · Start/Pause &nbsp;·&nbsp; R · Reset &nbsp;·&nbsp; M · Sound &nbsp;·&nbsp; Esc · Close
             </div>
           </div>
         )
@@ -315,7 +445,20 @@ export default function Traitors() {
           <h1 className="traitors-title">The Traitors</h1>
           <p className="traitors-subtitle">Round Table Countdowns</p>
         </div>
-        <div className="traitors-header-spacer" />
+        <div className="traitors-header-controls">
+          <button className="traitors-header-btn" onClick={toggleAllTimers} disabled={!hasRunningTimers && !hasStartableTimers}>
+            {hasRunningTimers ? 'Pause All' : 'Start All'}
+          </button>
+          <button className="traitors-header-btn" onClick={resetAllTimers}>
+            Reset All
+          </button>
+          <button
+            className={`traitors-header-btn${soundEnabled ? ' active' : ''}`}
+            onClick={() => setSoundEnabled(prev => !prev)}
+          >
+            {soundEnabled ? 'Sound On' : 'Sound Off'}
+          </button>
+        </div>
       </div>
 
       {/* ---- TIMER CARDS ---- */}
