@@ -40,7 +40,7 @@ export default function Home() {
   const [projectsCount, setProjectsCount] = useState(0)
   const [yearsCount, setYearsCount] = useState(0)
   const [messages, setMessages] = useState<ChatMessage[]>([
-    { text: "Hey! I'm an AI version of Austin. Ask me about my experience, skills, projects, or anything else. What would you like to know?", type: 'bot' },
+    { text: "Hey! I'm an AI version of Aaron. Ask me about my experience, skills, projects, or anything else. What would you like to know?", type: 'bot' },
   ])
   const [chatInput, setChatInput] = useState('')
   const [isTyping, setIsTyping] = useState(false)
@@ -142,7 +142,7 @@ export default function Home() {
 
   return (
     <>
-      <SEO title="Home" description="Austin Howell - Software Engineer, Creator, Gamer" />
+      <SEO title="Home" description="Aaron Dobbins - Software Engineer, Creator, Gamer" />
       <StarField shootingStars nebulaOrbs geoShapes />
 
       {/* ===== HERO ===== */}
@@ -157,10 +157,10 @@ export default function Home() {
             <div className="avatar-ring-pulse" />
             <div className="avatar-ring-outer" />
             <div className="avatar-ring" />
-            <div className="avatar">AH</div>
+            <div className="avatar">AD</div>
           </div>
 
-          <h1 className="home-title">Austin Howell</h1>
+          <h1 className="home-title">Aaron Dobbins</h1>
           <p className="home-subtitle">Software Engineer &bull; Creator &bull; Gamer</p>
           <div className="typed-line">
             {typedText}
@@ -238,9 +238,9 @@ export default function Home() {
         </div>
         <div className="chat-box">
           <div className="chat-title-bar">
-            <div className="chat-avatar-sm">AH</div>
+            <div className="chat-avatar-sm">AD</div>
             <div className="chat-title-info">
-              <div className="chat-title-name">Austin Howell</div>
+              <div className="chat-title-name">Aaron Dobbins</div>
               <div className="chat-title-status">
                 <div className="dot" />
                 Online
