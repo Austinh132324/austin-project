@@ -10,7 +10,7 @@ describe('App', () => {
 
   it('renders the home page by default', () => {
     render(<App />)
-    const headings = screen.getAllByText('Austin Howell')
+    const headings = screen.getAllByText('Aaron Dobbins')
     expect(headings.length).toBeGreaterThanOrEqual(1)
   })
 
